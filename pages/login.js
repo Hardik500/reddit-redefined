@@ -1,18 +1,15 @@
-import Head from "next/head";
 import Link from "next/link";
-import randomize from "randomatic";
+import Layout from "../components/layout";
 
-const code = randomize('Aa0!', 10);
+const code = "XÆA-12";
 
 const link =
-  process.env.reddit_api + `/authorize?client_id=${process.env.client_id}&response_type=code&state=${code}&redirect_uri=${process.env.redirect_url}&duration=permanent&scope=identity`;
+  process.env.reddit_api +
+  `/authorize?client_id=${process.env.client_id}&response_type=code&state=${code}&redirect_uri=${process.env.redirect_url}&duration=permanent&scope=identity`;
 
-export default function Home() {
+export default function Login() {
   return (
-    <>
-      <Head>
-        <title>reddit: But redefined</title>
-      </Head>
+    <Layout login>
       <section>
         <button>
           <Link href={link} prefetch={false}>
@@ -20,6 +17,6 @@ export default function Home() {
           </Link>
         </button>
       </section>
-    </>
+    </Layout>
   );
 }
