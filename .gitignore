@@ -1,2 +1,12 @@
+# next.js build output
 .next
+
+# Dependency directories
 node_modules
+
+# Configuration file
+next.config.js
+
+# dotenv environment variables file
+.env
+.env.build
