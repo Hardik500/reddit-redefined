@@ -58,14 +58,15 @@ const Home = (props) => {
 
     if (error) return <div>failed to load</div>;
     if (!data) return <div>loading...</div>;
-
+    // const data = fetcher(link);
     document.cookie = `access_token=${data.data.access_token}; path = /`;
     document.cookie = `refresh_token=${data.data.refresh_token}; path = /`;
     Router.push("/");
-  } else {
-    const link = process.env.reddit_outh + `api/v1/me`;
 
-    console.log(fetcher2(link, props.access_token));
+  } else {
+    const link2 = process.env.reddit_outh + `subreddits/mine/subscriber?limit=10`;
+
+    console.log(fetcher2(link2, props.access_token));
     return <Layout home>Hello Main Page</Layout>;
   }
 };
