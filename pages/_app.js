@@ -29,8 +29,7 @@ export default class MyApp extends App {
   static async getInitialProps({ Component, router, ctx }) {
     let pageProps = {};
     let allCookies = cookies(ctx);
-
-    if (allCookies.refresh_token && allCookies.refresh_time < new Date()) {
+    if (allCookies.refresh_token && new Date(allCookies.refresh_time) < new Date()) {
       const data = await refreshAccessToken(allCookies.refresh_token);
       const newDate = new Date(new Date().getTime() + 60 * 60 * 1000);
       pageProps = data;
