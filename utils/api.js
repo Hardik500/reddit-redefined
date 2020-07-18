@@ -41,7 +41,7 @@ const getUserData = async (token) =>
         .then(res => res.data)
         .catch(err => err);
     
-const getPopularSubreddits = async (token) =>
+const getUserSubreddits = async (token) =>
     await axios
         .get(`${oauth}subreddits/mine/subscriber?limit=100`, {
             headers: {
@@ -52,7 +52,7 @@ const getPopularSubreddits = async (token) =>
         .catch(err => err);
 
 module.exports = {
-    getPopularSubreddits,
+    getUserSubreddits,
     getUserData,
     refreshAccessToken,
     generateTempCode
