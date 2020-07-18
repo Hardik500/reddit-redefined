@@ -1,3 +1,9 @@
-const isEmptyObject = (query) => Object.entries(query).length==0;
+const isEmptyObject = (query) => {
+  if (query) {
+    return Object.entries(query).length == 0;
+  }
 
-module.exports = {isEmptyObject};
+  return true;
+};
+
+module.exports = { isEmptyObject };
