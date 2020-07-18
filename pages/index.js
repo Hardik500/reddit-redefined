@@ -2,7 +2,7 @@ import Link from "next/link";
 import Router from "next/router";
 import Cookies from "js-cookie";
 
-import { getUserData } from "../utils/api";
+import { getUserData, getUserSubreddits } from "../utils/api";
 import Layout from "../components/layout";
 import { isEmptyObject } from "../utils/helper";
 
@@ -44,7 +44,7 @@ class Home extends React.Component {
     }
 
     if (this.state.isLoggedIn) {
-      getUserData(this.state.access_token).then((data) => {
+      getUserSubreddits(this.state.access_token).then((data) => {
         console.log(data);
       })
       return <Layout home>Hello Main Page</Layout>;

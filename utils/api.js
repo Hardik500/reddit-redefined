@@ -38,10 +38,21 @@ const getUserData = async (token) =>
                 Authorization: `bearer ${token}`,
             },
         })
-        .then((res) => res.data)
-        .catch((err) => err);
+        .then(res => res.data)
+        .catch(err => err);
+    
+const getPopularSubreddits = async (token) =>
+    await axios
+        .get(`${oauth}subreddits/mine/subscriber?limit=100`, {
+            headers: {
+                Authorization: `bearer ${token}`,
+            },
+        })
+        .then(res => res.data)
+        .catch(err => err);
 
 module.exports = {
+    getPopularSubreddits,
     getUserData,
     refreshAccessToken,
     generateTempCode
