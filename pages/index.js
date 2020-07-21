@@ -11,11 +11,11 @@ import {
   getRPopular,
   getBest,
   getUserInformation,
+  getAboutOfSubreddit,
 } from "../utils/api";
 
 //Components
 import Navbar from "../components/navbar";
-import Layout from "../components/layout";
 
 //Helper functions
 import { isEmptyObject, getLatest } from "../utils/helper";
@@ -28,6 +28,7 @@ class Home extends React.Component {
       refresh_token: null,
       isLoggedIn: false,
       data: null,
+      subreddit: [],
       after: null,
       counter: 1,
     };
@@ -50,7 +51,10 @@ class Home extends React.Component {
     }
 
     //Access token got updated
-    if(this.props.access_token != this.state.access_token ?? Cookies.get("access_token")){
+    if (
+      this.props.access_token != this.state.access_token ??
+      Cookies.get("access_token")
+    ) {
       document.cookie = `access_token=${this.props.access_token}; path = /`;
     }
 
@@ -70,11 +74,18 @@ class Home extends React.Component {
           data: data.children,
           after: getLatest(data.children),
         });
+        this.setSubRedditData(data.children[0].data.subreddit);
       });
-
-      getUserInformation(Cookies.get("access_token"));
     }
   }
+
+  setSubRedditData = async (subreddit) => {
+    getAboutOfSubreddit(Cookies.get("access_token"), subreddit).then(
+      ({ data }) => {
+        this.setState({ subreddit: data });
+      }
+    );
+  };
 
   /* Run the function to get the latest data after the last post */
 
@@ -98,9 +109,12 @@ class Home extends React.Component {
     this.setState({ counter: this.state.counter + 1 });
 
     //Remove the first value of array
-    let newArr = [...this.state.data];
-    newArr.splice(0, 1);
-    this.setState({ data: newArr });
+    let newDataArr = [...this.state.data];
+    newDataArr.splice(0, 1);
+    this.setState({ data: newDataArr });
+
+    this.setState({ subreddit: [] });
+    this.setSubRedditData(newDataArr[0].data.subreddit);
 
     /* 
       If the no of posts viewed is equal to 5,
@@ -126,10 +140,12 @@ class Home extends React.Component {
 
     if ((this.state.isLoggedIn && this.state.data?.length) || 0) {
       const { subreddit_name_prefixed, title } = this.state.data[0].data;
+      const { icon_img } = this.state.subreddit;
       return (
         <>
           <Navbar
             subreddit={subreddit_name_prefixed}
+            subreddit_logo={icon_img}
             user={"u/Hardik500"}
           ></Navbar>
           <button onClick={this.getNextPost}>Next Post</button>
