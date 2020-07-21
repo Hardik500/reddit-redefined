@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Layout from "../components/layout";
 
-const code = "XÆA-12";
+//Secret code that will be passed in the URL parameter
+const code = process.env.secret_code;
 
 const link =
   process.env.reddit_api +
