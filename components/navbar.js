@@ -1,6 +1,7 @@
 import styles from "./navbar.module.scss";
+import { formatDistanceToNow } from 'date-fns';
 
-export default function Navbar({ subreddit, subreddit_logo, user }) {
+export default function Navbar({ subreddit_title, subreddit_logo, user, post_date }) {
   return (
     <div className={styles.nav}>
       <div className={styles.horz}>
@@ -24,10 +25,10 @@ export default function Navbar({ subreddit, subreddit_logo, user }) {
             </svg>
           )}
         </div>
-        <div className={styles.post_subreddit}>{subreddit} &nbsp;&nbsp;</div>
+        <div className={styles.post_subreddit}>{subreddit_title} &nbsp;&nbsp;</div>
         <div className={styles.horz}>
           <div className={styles.user_posted}>Posted by {user} &nbsp;</div>
-          <div className={styles.time_posted}>3 Hrs Ago</div>
+          <div className={styles.time_posted}>{formatDistanceToNow(new Date(post_date * 1000))}</div>
         </div>
       </div>
 
