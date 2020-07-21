@@ -41,6 +41,9 @@ class Home extends React.Component {
       document.cookie = `access_token=${this.props.access_token}; path = /`;
       document.cookie = `refresh_token=${this.props.refresh_token}; path = /`;
       document.cookie = `refresh_time = ${this.props.refresh_time}; path = /`;
+
+      //Reroute page to / url
+      Router.push("/");
     }
 
     /* Access token is present in the cookies */
