@@ -28,7 +28,7 @@ class Home extends React.Component {
       refresh_token: null,
       isLoggedIn: false,
       data: null,
-      subreddit: [],
+      subreddit: {},
       after: null,
       counter: 1,
     };
@@ -76,15 +76,27 @@ class Home extends React.Component {
         });
         this.setSubRedditData(data.children[0].data.subreddit);
       });
+
+      this.setState({
+        subreddit: JSON.parse(localStorage.getItem("subredditData")) ?? {}
+      })
     }
   }
 
   setSubRedditData = async (subreddit) => {
     getAboutOfSubreddit(Cookies.get("access_token"), subreddit).then(
       ({ data }) => {
-        this.setState({ subreddit: data });
+        this.setState((prevState) => ({
+          subreddit: {
+            // object that we want to update
+            ...prevState.subreddit, // keep all other key-value pairs
+            [subreddit]: data, // update the value of specific key
+          },
+        }));
       }
     );
+
+    localStorage.setItem("subredditData", JSON.stringify(this.state.subreddit) );
   };
 
   /* Run the function to get the latest data after the last post */
@@ -113,8 +125,10 @@ class Home extends React.Component {
     newDataArr.splice(0, 1);
     this.setState({ data: newDataArr });
 
-    this.setState({ subreddit: [] });
-    this.setSubRedditData(newDataArr[0].data.subreddit);
+    //Check if key already exists in the state
+    if(this.state.subreddit[newDataArr[0].data.subreddit]  === undefined){
+      this.setSubRedditData(newDataArr[0].data.subreddit);
+    }
 
     /* 
       If the no of posts viewed is equal to 5,
@@ -139,14 +153,22 @@ class Home extends React.Component {
     /* The user is logged in */
 
     if ((this.state.isLoggedIn && this.state.data?.length) || 0) {
-      const { subreddit_name_prefixed, title } = this.state.data[0].data;
-      const { icon_img } = this.state.subreddit;
+      const {
+        subreddit,
+        subreddit_name_prefixed,
+        title,
+        created_utc,
+      } = this.state.data[0].data;
+
+      //Get the icon of the subreddit
+      const { icon_img } = this.state.subreddit[subreddit] ?? [];
       return (
         <>
           <Navbar
-            subreddit={subreddit_name_prefixed}
+            subreddit_title={subreddit_name_prefixed}
             subreddit_logo={icon_img}
             user={"u/Hardik500"}
+            post_date={created_utc}
           ></Navbar>
           <button onClick={this.getNextPost}>Next Post</button>
           <h1>{title}</h1>
