@@ -97,7 +97,17 @@ const getBest = async (token, limit = 10, afterId = null, count = 0) =>
 
 const getUserInformation = async (token) =>
   await axios
-    .get(`${oauth}/api/user_data_by_account_ids?id=t2_3gmne06n`, {
+    .get(`${oauth}/api/user_data_by_account_ids?ids=t2_3gmne06n`, {
+      headers: {
+        Authorization: `bearer ${token}`,
+      },
+    })
+    .then((res) => res.data)
+    .catch((err) => err);
+
+const getAboutOfSubreddit = async (token, subredditName = "technology") =>
+  await axios
+    .get(`${oauth}/r/${subredditName}/about`, {
       headers: {
         Authorization: `bearer ${token}`,
       },
@@ -106,6 +116,7 @@ const getUserInformation = async (token) =>
     .catch((err) => err);
 
 module.exports = {
+  getAboutOfSubreddit,
   getUserInformation,
   getBest,
   getRPopular,
