@@ -6,7 +6,7 @@ $font-stack: "Righteous", cursive;
 $red-color: #ff4e4e;
 $white-color: #fff;
 
-$primary-color: #1B1111;
+$primary-color: #1b1111;
 $secondary-color: #939393;
 
 .nav {
@@ -19,23 +19,48 @@ $secondary-color: #939393;
 }
 
 .horz {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .app_logo {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid $white-color;
-  background-color: $red-color;
-  margin: 0px 10px;
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    border: 2px solid $white-color;
+    margin: 0px 10px;
+  }
 }
 
 .app_heading {
   font-size: 24px;
   font-weight: 700;
   font-family: 100% $font-stack, cursive;
+}
+
+.subreddit_icon {
+  margin: 0 10px;
+
+  img {
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 2px solid $white-color;
+  }
+}
+
+.default_subreddit {
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  border: 2px solid $white-color;
+  display: inline-block;
+  vertical-align: middle;
+  background: #0079d3;
+  box-sizing: border-box;
+  fill: $white-color;
 }
 
 .post_subreddit {
