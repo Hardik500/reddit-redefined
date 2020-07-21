@@ -6,4 +6,6 @@ const isEmptyObject = (query) => {
   return true;
 };
 
-module.exports = { isEmptyObject };
+const getLatest = (posts) => "t3_" + posts[posts.length - 1].data.id;
+
+module.exports = { isEmptyObject, getLatest};
