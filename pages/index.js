@@ -9,9 +9,12 @@ import {
   getUserSubreddits,
   getPopularSubereddits,
   getRPopular,
+  getBest,
+  getUserInformation,
 } from "../utils/api";
 
 //Components
+import Navbar from "../components/navbar";
 import Layout from "../components/layout";
 
 //Helper functions
@@ -35,7 +38,7 @@ class Home extends React.Component {
     if (
       !isEmptyObject(this.props) &&
       !this.state.isLoggedIn &&
-      this.props.access_token != undefined
+      this.props.refresh_token != undefined
     ) {
       //Set the respective cookie values
       document.cookie = `access_token=${this.props.access_token}; path = /`;
@@ -46,9 +49,14 @@ class Home extends React.Component {
       Router.push("/");
     }
 
+    //Access token got updated
+    if(this.props.access_token != this.state.access_token ?? Cookies.get("access_token")){
+      document.cookie = `access_token=${this.props.access_token}; path = /`;
+    }
+
     /* Access token is present in the cookies */
 
-    if (Cookies.get("access_token") ?? undefined) {
+    if (Cookies.get("refresh_token") ?? undefined) {
       this.setState({
         access_token: Cookies.get("access_token"),
         refresh_token: Cookies.get("refresh_token"),
@@ -63,6 +71,8 @@ class Home extends React.Component {
           after: getLatest(data.children),
         });
       });
+
+      getUserInformation(Cookies.get("access_token"));
     }
   }
 
@@ -115,15 +125,20 @@ class Home extends React.Component {
     /* The user is logged in */
 
     if ((this.state.isLoggedIn && this.state.data?.length) || 0) {
+      const { subreddit_name_prefixed, title } = this.state.data[0].data;
       return (
-        <Layout home>
+        <>
+          <Navbar
+            subreddit={subreddit_name_prefixed}
+            user={"u/Hardik500"}
+          ></Navbar>
           <button onClick={this.getNextPost}>Next Post</button>
-          <h1>{this.state.data[0].data.title}</h1>
-        </Layout>
+          <h1>{title}</h1>
+        </>
       );
     } else {
       /* If nothing is there show the loader */
-      return <Layout home>Loading...</Layout>;
+      return <div>Loading...</div>;
     }
   }
 }
