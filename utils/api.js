@@ -85,7 +85,29 @@ const getRPopular = async (token, limit = 10, afterId = null, count = 0) =>
     .then((res) => res.data)
     .catch((err) => err);
 
+const getBest = async (token, limit = 10, afterId = null, count = 0) =>
+  await axios
+    .get(`${oauth}/best?limit=${limit}`, {
+      headers: {
+        Authorization: `bearer ${token}`,
+      },
+    })
+    .then((res) => res.data)
+    .catch((err) => err);
+
+const getUserInformation = async (token) =>
+  await axios
+    .get(`${oauth}/api/user_data_by_account_ids?id=t2_3gmne06n`, {
+      headers: {
+        Authorization: `bearer ${token}`,
+      },
+    })
+    .then((res) => res.data)
+    .catch((err) => err);
+
 module.exports = {
+  getUserInformation,
+  getBest,
   getRPopular,
   getPopularSubereddits,
   getUserSubreddits,
