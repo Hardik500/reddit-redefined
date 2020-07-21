@@ -8,7 +8,7 @@ export default function Layout({ children, home }) {
     <div>
       <Head>
         <title>{siteTitle}</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/images/reddit.png" />
         <meta
           name="description"
           content="Learn how to build a personal website using Next.js"
