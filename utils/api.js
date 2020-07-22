@@ -54,7 +54,7 @@ const getUserData = async (token) =>
 
 const getUserSubreddits = async (token) =>
   await axios
-    .get(`${oauth}/subreddits/mine/subscriber?limit=100`, {
+    .get(`${oauth}/subreddits/mine/subscriber?limit=25`, {
       headers: {
         Authorization: `bearer ${token}`,
       },
@@ -95,9 +95,9 @@ const getBest = async (token, limit = 10, afterId = null, count = 0) =>
     .then((res) => res.data)
     .catch((err) => err);
 
-const getUserInformation = async (token) =>
+const getUserInformation = async (token, ids) =>
   await axios
-    .get(`${oauth}/api/user_data_by_account_ids?ids=t2_3gmne06n`, {
+    .get(`${oauth}/api/user_data_by_account_ids?ids=${ids}`, {
       headers: {
         Authorization: `bearer ${token}`,
       },
