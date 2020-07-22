@@ -16,6 +16,7 @@ import {
 
 //Components
 import Navbar from "../components/navbar";
+import UserCommunities from "../components/user_communities";
 
 //Helper functions
 import { isEmptyObject, getLatest } from "../utils/helper";
@@ -27,10 +28,13 @@ class Home extends React.Component {
       access_token: null,
       refresh_token: null,
       isLoggedIn: false,
-      data: null,
+      post_data: null,
+      post_user_data: null,
+      user_data: null,
       subreddit: {},
       after: null,
       counter: 1,
+      user_subreddit: null,
     };
   }
 
@@ -69,17 +73,40 @@ class Home extends React.Component {
 
       /* Initially load the data for the app */
 
-      getRPopular(Cookies.get("access_token")).then(({ data }) => {
-        this.setState({
-          data: data.children,
-          after: getLatest(data.children),
+      getRPopular(Cookies.get("access_token"))
+        .then(({ data }) => {
+          this.setState({
+            post_data: data.children,
+            after: getLatest(data.children),
+          });
+          this.setSubRedditData(data.children[0].data.subreddit);
+        })
+        .then(() => {
+          getUserInformation(
+            Cookies.get("access_token"),
+            this.state.post_data.map((e) => e.data.author_fullname).toString()
+          ).then((data) => {
+            this.setState({
+              post_user_data: data,
+            });
+          });
         });
-        this.setSubRedditData(data.children[0].data.subreddit);
-      });
 
       this.setState({
-        subreddit: JSON.parse(localStorage.getItem("subredditData")) ?? {}
-      })
+        subreddit: JSON.parse(localStorage.getItem("subredditData")) ?? {},
+      });
+
+      getUserData(Cookies.get("access_token")).then((data) => {
+        this.setState({
+          user_data: data,
+        });
+      });
+
+      getUserSubreddits(Cookies.get("access_token")).then((data) => {
+        this.setState({
+          user_subreddit: data.data.children,
+        });
+      });
     }
   }
 
@@ -96,7 +123,7 @@ class Home extends React.Component {
       }
     );
 
-    localStorage.setItem("subredditData", JSON.stringify(this.state.subreddit) );
+    localStorage.setItem("subredditData", JSON.stringify(this.state.subreddit));
   };
 
   /* Run the function to get the latest data after the last post */
@@ -107,12 +134,34 @@ class Home extends React.Component {
       5,
       this.state.after,
       this.state.counter
-    ).then(({ data }) => {
-      this.setState({
-        data: [...this.state.data, ...data.children],
-        after: getLatest(data.children),
+    )
+      .then(({ data }) => {
+        this.setState({
+          post_data: [...this.state.post_data, ...data.children],
+          after: getLatest(data.children),
+        });
+      })
+      .then(() => {
+        //Get the usernames
+        getUserInformation(
+          Cookies.get("access_token"),
+          this.state.post_data
+            .filter(
+              (e) =>
+                this.state.post_user_data[e.data.author_fullname] == undefined
+            )
+            .map((e) => e.data.author_fullname)
+            .toString()
+        ).then((data) => {
+          this.setState((prevState) => ({
+            post_user_data: {
+              // object that we want to update
+              ...prevState.post_user_data, // keep all other key-value pairs
+              ...data, // update the value of specific key
+            },
+          }));
+        });
       });
-    });
   };
 
   /* Remove the first post and update the counter value */
@@ -120,15 +169,15 @@ class Home extends React.Component {
   getNextPost = async () => {
     this.setState({ counter: this.state.counter + 1 });
 
-    //Remove the first value of array
-    let newDataArr = [...this.state.data];
-    newDataArr.splice(0, 1);
-    this.setState({ data: newDataArr });
-
     //Check if key already exists in the state
-    if(this.state.subreddit[newDataArr[0].data.subreddit]  === undefined){
-      this.setSubRedditData(newDataArr[0].data.subreddit);
+    if (!this.state.subreddit[this.state.post_data[1]?.data.subreddit]) {
+      this.setSubRedditData(this.state.post_data[1]?.data.subreddit);
     }
+
+    //Remove the first value of array
+    let newDataArr = [...this.state.post_data];
+    newDataArr.splice(0, 1);
+    this.setState({ post_data: newDataArr });
 
     /* 
       If the no of posts viewed is equal to 5,
@@ -152,26 +201,46 @@ class Home extends React.Component {
 
     /* The user is logged in */
 
-    if ((this.state.isLoggedIn && this.state.data?.length) || 0) {
+    if ((this.state.isLoggedIn && this.state.post_data?.length) || 0) {
       const {
         subreddit,
         subreddit_name_prefixed,
         title,
         created_utc,
-      } = this.state.data[0].data;
+        author_fullname,
+      } = this.state.post_data[0].data;
 
       //Get the icon of the subreddit
-      const { icon_img } = this.state.subreddit[subreddit] ?? [];
+      const sub_icon_img =
+        this.state.subreddit[subreddit]?.icon_img ?? undefined;
+
+      //Ge the info of current user
+      const { name, link_karma, comment_karma, icon_img } =
+        this.state.user_data ?? [];
+
+      //Get the username of post
+      const username =
+        this.state.post_user_data?.[author_fullname].name;
+
       return (
         <>
           <Navbar
             subreddit_title={subreddit_name_prefixed}
-            subreddit_logo={icon_img}
-            user={"u/Hardik500"}
+            subreddit_logo={sub_icon_img}
+            post_user={username}
             post_date={created_utc}
+            current_username={name}
+            current_user_karma={link_karma + comment_karma}
+            current_user_profile={icon_img}
           ></Navbar>
-          <button onClick={this.getNextPost}>Next Post</button>
-          <h1>{title}</h1>
+          <div style={{ display: "flex" }}>
+            <UserCommunities user_subreddit={this.state.user_subreddit} />
+            <div>
+              <button onClick={this.getNextPost}>Next Post</button>
+              <h1>{title}</h1>
+            </div>
+            <UserCommunities user_subreddit={this.state.user_subreddit} />
+          </div>
         </>
       );
     } else {
