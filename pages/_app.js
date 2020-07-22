@@ -1,5 +1,5 @@
 //Load global CSS files which will be loaded by every page
-import "../styles/global.css";
+import "../styles/global.scss";
 
 //Library functions
 import App from "next/app";

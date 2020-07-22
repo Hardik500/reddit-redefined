@@ -1,3 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Righteous&display=swap");
+
+$primary-color: #1b1111;
+$white-color: #fff;
+$font-stack: "Righteous", cursive;
+
 html,
 body {
   padding: 0;
@@ -6,6 +12,9 @@ body {
     Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   line-height: 1.6;
   font-size: 18px;
+  background-color: $primary-color;
+  color: $white-color;
+  font-family: $font-stack;
 }
 
 * {
