@@ -1,20 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=Righteous&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Palanquin+Dark&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Ropa+Sans&display=swap");
 
-$font-stack: "Righteous", cursive;
 $red-color: #ff4e4e;
-$white-color: #fff;
 
 $primary-color: #1b1111;
+$white-color: #fff;
 $secondary-color: #939393;
 
 .nav {
   display: flex;
   justify-content: space-between;
   border-bottom: 2px solid $white-color;
-  background-color: $primary-color;
-  color: $white-color;
   padding: 10px 20px;
 }
 
@@ -36,7 +32,6 @@ $secondary-color: #939393;
 .app_heading {
   font-size: 24px;
   font-weight: 700;
-  font-family: 100% $font-stack, cursive;
 }
 
 .subreddit_icon {
@@ -80,12 +75,14 @@ $secondary-color: #939393;
 }
 
 .profile_pic {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid $white-color;
-  background-color: $red-color;
-  margin: 0px 10px;
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid $white-color;
+    background-color: $red-color;
+    margin: 0px 10px;
+  }
 }
 
 .user_info {
@@ -93,13 +90,17 @@ $secondary-color: #939393;
   flex-direction: column;
   font-family: "Ropa Sans", sans-serif;
   font-size: 16px;
+
+  >  {
+    font-weight: 700;
+  }
 }
 
 .settings {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid $white-color;
-  background-color: $secondary-color;
-  margin: 0px 10px;
+  img {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    margin: 0px 10px;
+  }
 }
