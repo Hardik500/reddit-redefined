@@ -23,6 +23,7 @@
     "randomatic": "^3.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-html-parser": "^2.0.2",
     "sass": "^1.26.10",
     "swr": "^0.2.3"
   },
