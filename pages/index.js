@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Router from "next/router";
 import Cookies from "js-cookie";
+import ReactHtmlParser from "react-html-parser";
 
 //API functions
 import {
@@ -90,23 +91,34 @@ class Home extends React.Component {
               post_user_data: data,
             });
           });
+        })
+        .catch((err) => {
+          Router.push("/login");
         });
 
       this.setState({
         subreddit: JSON.parse(localStorage.getItem("subredditData")) ?? {},
       });
 
-      getUserData(Cookies.get("access_token")).then((data) => {
-        this.setState({
-          user_data: data,
+      getUserData(Cookies.get("access_token"))
+        .then((data) => {
+          this.setState({
+            user_data: data,
+          });
+        })
+        .catch((err) => {
+          Router.push("/login");
         });
-      });
 
-      getUserSubreddits(Cookies.get("access_token")).then((data) => {
-        this.setState({
-          user_subreddit: data.data.children,
+      getUserSubreddits(Cookies.get("access_token"))
+        .then((data) => {
+          this.setState({
+            user_subreddit: data.data.children,
+          });
+        })
+        .catch((err) => {
+          Router.push("/login");
         });
-      });
     }
   }
 
@@ -164,6 +176,12 @@ class Home extends React.Component {
       });
   };
 
+  htmlDecode(input) {
+    var e = document.createElement("div");
+    e.innerHTML = input;
+    return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+  }
+
   /* Remove the first post and update the counter value */
 
   getNextPost = async () => {
@@ -208,6 +226,10 @@ class Home extends React.Component {
         title,
         created_utc,
         author_fullname,
+        post_hint,
+        media,
+        secure_media_embed,
+        url,
       } = this.state.post_data[0].data;
 
       //Get the icon of the subreddit
@@ -219,8 +241,7 @@ class Home extends React.Component {
         this.state.user_data ?? [];
 
       //Get the username of post
-      const username =
-        this.state.post_user_data?.[author_fullname].name;
+      const username = this.state.post_user_data?.[author_fullname].name;
 
       return (
         <>
@@ -238,6 +259,19 @@ class Home extends React.Component {
             <div>
               <button onClick={this.getNextPost}>Next Post</button>
               <h1>{title}</h1>
+              {post_hint === "image" && (
+                <img src={url} width="460px" height="380px" />
+              )}
+              {post_hint === "hosted:video" && (
+                <video src={media.reddit_video.fallback_url} autoPlay></video>
+              )}
+              {post_hint === "rich:video" && (
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: this.htmlDecode(secure_media_embed.content),
+                  }}
+                />
+              )}
             </div>
             <UserCommunities user_subreddit={this.state.user_subreddit} />
           </div>
