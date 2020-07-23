@@ -10,3 +10,6 @@ node_modules
 
 # Dummy file
 demo.json
+
+# Yarn error
+yarn-error.log
