@@ -9,8 +9,8 @@ import {
   getPopularSubereddits,
   getRPopular,
   getBest,
-  getUserInformation,
   getAboutOfSubreddit,
+  refreshAccessToken,
 } from "../utils/api";
 
 //Components
@@ -19,13 +19,15 @@ import Main from "../components/main";
 
 //Helper functions
 import {
-  setLocal,
-  getLocal,
-  setCookie,
   getCookie,
-  isEmptyObject,
+  getLocal,
   getLatest,
+  isEmptyObject,
+  setCookie,
+  setLocal,
+  reducePost,
 } from "../utils/helper";
+import cookies from "next-cookies";
 
 class Home extends React.Component {
   constructor(props) {
@@ -78,39 +80,61 @@ class Home extends React.Component {
       /* Initially load the data for the app */
 
       this.loadInitialDate();
-
-      getRPopular(getCookie("access_token"))
-        .then(({ data }) => {
-          this.setState({
-            post_data: data.children,
-            after: getLatest(data.children),
-          });
-          this.setSubRedditData(data.children[0].data.subreddit);
-        })
-        .catch((err) => {
-          Router.push("/login");
-        });
-
-      getUserData(getCookie("access_token"))
-        .then((data) => {
-          this.setState({
-            user_data: data,
-          });
-        })
-        .catch((err) => {
-          Router.push("/login");
-        });
+      this.compareTime();
+      setInterval(this.tick, 1000 * 60 * 60);
     }
   }
 
   loadInitialDate = () => {
+    /* Get the subreddit data from the local storage */
     this.setState({
       subreddit: JSON.parse(getLocal("subredditData")) ?? {},
     });
-  }
 
+    /* Initial load the data from the subreddit */
+    getRPopular(this.state.access_token ?? getCookie("access_token"))
+      .then(({ data }) => {
+        this.setState({
+          post_data: data.children,
+          after: getLatest(data.children),
+        });
+        this.setSubRedditData(data.children[0].data.subreddit);
+      })
+      .catch((err) => {
+        Router.push("/login");
+      });
+
+    /* Get the current user information */
+    getUserData(this.state.access_token ?? getCookie("access_token"))
+      .then((data) => {
+        this.setState({
+          user_data: data,
+        });
+      })
+      .catch((err) => {
+        Router.push("/login");
+      });
+  };
+
+  compareTime = async () => {
+    //get the mins of the current time
+    let currentDate = new Date();
+    let nextDate = new Date(getCookie("refresh_time"));
+
+    if (currentDate >= nextDate) {
+      const data = await refreshAccessToken(getCookie("refresh_token"));
+      const newDate = new Date(new Date().getTime() + 60 * 60 * 1000);
+      setCookie("access_token", data.access_token);
+      setCookie("refresh_time", newDate);
+      this.setState({
+        access_token: data.access_token,
+      });
+    }
+  };
+
+  /* Set the relative information of each subreddit in an object */
   setSubRedditData = async (subreddit) => {
-    getAboutOfSubreddit(getCookie("access_token"), subreddit).then(
+    getAboutOfSubreddit(this.state.access_token ?? getCookie("access_token"), subreddit).then(
       ({ data }) => {
         this.setState((prevState) => ({
           subreddit: {
@@ -129,17 +153,16 @@ class Home extends React.Component {
 
   getNewData = async () => {
     getRPopular(
-      this.state.access_token,
+      this.state.access_token ?? getCookie("access_token"),
       5,
       this.state.after,
       this.state.counter
-    )
-      .then(({ data }) => {
-        this.setState({
-          post_data: [...this.state.post_data, ...data.children],
-          after: getLatest(data.children),
-        });
-      })
+    ).then(({ data }) => {
+      this.setState({
+        post_data: [...this.state.post_data, ...data.children],
+        after: getLatest(data.children),
+      });
+    });
   };
 
   /* Remove the first post and update the counter value */
@@ -153,15 +176,13 @@ class Home extends React.Component {
     }
 
     //Remove the first value of array
-    let newDataArr = [...this.state.post_data];
-    newDataArr.splice(0, 1);
-    this.setState({ post_data: newDataArr });
+    this.setState({ post_data: reducePost(this.state.post_data) });
 
     /* 
       If the no of posts viewed is equal to 5,
       then fetch new data
     */
-    if (this.state.counter % 5 == 0) {
+    if (!(this.state.counter % 5)) {
       await this.getNewData();
       this.setState({ counter: 1 });
     }
@@ -192,7 +213,7 @@ class Home extends React.Component {
         thumbnail,
         secure_media_embed,
         url,
-        preview
+        preview,
       } = this.state.post_data[0].data;
 
       //Get the icon of the subreddit
@@ -203,7 +224,6 @@ class Home extends React.Component {
       const { name, link_karma, comment_karma, icon_img } =
         this.state.user_data ?? [];
 
-      {console.log(this.state.post_data[0])}
       return (
         <>
           <Navbar
