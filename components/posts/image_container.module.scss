@@ -1,17 +1,22 @@
+.imageContainer {
+  display: flex;
+  justify-content: center;
+}
+
 .image {
-  width: 500px;
-  height: 500px;
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
-  background-size: cover;
+  max-height: 512px;
 }
 
 .full {
-  transition: opacity 400ms ease 0ms;
+  height: auto;
+  max-width: 100%;
+
+  transition: opacity 400ms ease 500ms;
 }
 
 .thumb {
+  width: auto;
   filter: blur(20px);
   transform: scale(1.05);
-  transition: visibility 0ms ease 400ms;
+  transition: visibility 100ms ease 300ms;
 }
