@@ -38,14 +38,21 @@ const htmlDecode = (input) => {
   var e = document.createElement("div");
   e.innerHTML = input;
   return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
-}
+};
+
+const reducePost = (post_data) => {
+  let newDataArr = post_data;
+  newDataArr.splice(0, 1);
+  return newDataArr;
+};
 
 module.exports = {
-  htmlDecode,
-  setLocal,
-  getLocal,
-  setCookie,
   getCookie,
-  isEmptyObject,
   getLatest,
+  getLocal,
+  htmlDecode,
+  isEmptyObject,
+  reducePost,
+  setCookie,
+  setLocal,
 };
