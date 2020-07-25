@@ -1,5 +1,6 @@
 import parse from "html-react-parser";
 import ImageContainer from "./image_container";
+import VideoContainer from "./video_container";
 
 import { htmlDecode } from "../../utils/helper";
 
@@ -20,9 +21,9 @@ export default function Switcher({
           url={url}
           thumbnail={thumbnail}
         />
-      );
+        )
     case "hosted:video":
-      return <video src={media} autoPlay controls></video>;
+      return ( <VideoContainer media={media}/> )
     case "rich:video":
       return <div>{parse(htmlDecode(iframe))}</div>;
     case "link":
