@@ -16,11 +16,12 @@ export default function Main({
   nextPost,
 }) {
   return (
-    <div style={{ display: "flex" }}>
+    <div className={styles.flexContainer}>
       <UserCommunities />
-      <div>
+      <div className={styles.container}>
         <button onClick={nextPost}>Next Post</button>
-        <h1>{title}</h1>
+        <p>{title}</p>
+        <div className={styles.posts}>
         <Switcher
           type={type}
           html_text={selftext_html}
@@ -30,6 +31,7 @@ export default function Main({
           thumbnail={thumbnail}
           iframe={iframe}
         />
+        </div>
       </div>
       <UserCommunities />
     </div>
