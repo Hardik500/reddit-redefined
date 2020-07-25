@@ -11,18 +11,6 @@ $white-color: #fff;
   align-items: center;
 }
 
-.default_subreddit {
-  height: 35px;
-  width: 35px;
-  border-radius: 50%;
-  border: 2px solid $white-color;
-  display: inline-block;
-  vertical-align: middle;
-  background: #0079d3;
-  box-sizing: border-box;
-  fill: $white-color;
-}
-
 .subreddit_icon {
   margin: 0 10px;
 
