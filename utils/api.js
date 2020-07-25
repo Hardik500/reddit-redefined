@@ -72,10 +72,10 @@ const getPopularSubereddits = async (token) =>
     .then((res) => res.data)
     .catch((err) => err);
 
-const getRPopular = async (token , limit = 10, afterId = null, count = 0, category = "hot") =>
+const getRPopular = async (token , limit = 10, afterId = null, category = "hot") =>
   await axios
     .get(
-      `${oauth}/r/popular/${category}?limit=${limit}&g=GLOBAL&after=${afterId}&count=${count}`,
+      `${oauth}/r/memes/${category}?limit=${limit}&g=GLOBAL&after=${afterId}&count=${limit}`,
       {
         headers: {
           Authorization: `bearer ${token}`,

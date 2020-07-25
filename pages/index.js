@@ -40,7 +40,6 @@ class Home extends React.Component {
       user_data: null,
       subreddit: {},
       after: null,
-      counter: 1,
     };
   }
 
@@ -77,11 +76,14 @@ class Home extends React.Component {
         isLoggedIn: true,
       });
 
-      /* Initially load the data for the app */
-
-      this.loadInitialDate();
+      /* Intially compare time of now and the next refresh_time */
       this.compareTime();
-      setInterval(this.tick, 1000 * 60 * 60);
+      
+      /* Initially load the data for the app */
+      this.loadInitialDate();
+      
+      /* Start the counter for the next time comparison */
+      setInterval(this.compareTime, 1000 * 60 * 60);
     }
   }
 
@@ -155,8 +157,7 @@ class Home extends React.Component {
     getRPopular(
       this.state.access_token ?? getCookie("access_token"),
       5,
-      this.state.after,
-      this.state.counter
+      this.state.after
     ).then(({ data }) => {
       this.setState({
         post_data: [...this.state.post_data, ...data.children],
@@ -165,11 +166,9 @@ class Home extends React.Component {
     });
   };
 
-  /* Remove the first post and update the counter value */
+  /* Remove the first post */
 
   getNextPost = async () => {
-    this.setState({ counter: this.state.counter + 1 });
-
     //Check if key already exists in the state
     if (!this.state.subreddit[this.state.post_data[1]?.data.subreddit]) {
       this.setSubRedditData(this.state.post_data[1]?.data.subreddit);
@@ -182,9 +181,8 @@ class Home extends React.Component {
       If the no of posts viewed is equal to 5,
       then fetch new data
     */
-    if (!(this.state.counter % 5)) {
+    if (!(this.state.post_data.length % 5)) {
       await this.getNewData();
-      this.setState({ counter: 1 });
     }
   };
 
