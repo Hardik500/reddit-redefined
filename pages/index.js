@@ -35,7 +35,6 @@ class Home extends React.Component {
       refresh_token: null,
       isLoggedIn: false,
       post_data: null,
-      post_user_data: null,
       user_data: null,
       subreddit: {},
       after: null,
@@ -87,18 +86,6 @@ class Home extends React.Component {
             after: getLatest(data.children),
           });
           this.setSubRedditData(data.children[0].data.subreddit);
-        })
-        .then(() => {
-          getUserInformation(
-            getCookie("access_token"),
-            this.state.post_data
-              .map(({ data }) => data.author_fullname)
-              .toString()
-          ).then((data) => {
-            this.setState({
-              post_user_data: data,
-            });
-          });
         })
         .catch((err) => {
           Router.push("/login");
@@ -153,27 +140,6 @@ class Home extends React.Component {
           after: getLatest(data.children),
         });
       })
-      .then(() => {
-        //Get the usernames
-        getUserInformation(
-          getCookie("access_token"),
-          this.state.post_data
-            .filter(
-              (e) =>
-                this.state.post_user_data[e.data.author_fullname] == undefined
-            )
-            .map((e) => e.data.author_fullname)
-            .toString()
-        ).then((data) => {
-          this.setState((prevState) => ({
-            post_user_data: {
-              // object that we want to update
-              ...prevState.post_user_data, // keep all other key-value pairs
-              ...data, // update the value of specific key
-            },
-          }));
-        });
-      });
   };
 
   /* Remove the first post and update the counter value */
@@ -215,13 +181,15 @@ class Home extends React.Component {
 
     if ((this.state.isLoggedIn && this.state.post_data?.length) || 0) {
       const {
+        author,
         subreddit,
         subreddit_name_prefixed,
         title,
         created_utc,
-        author_fullname,
         post_hint,
+        selftext_html,
         media,
+        thumbnail,
         secure_media_embed,
         url,
         preview
@@ -235,15 +203,13 @@ class Home extends React.Component {
       const { name, link_karma, comment_karma, icon_img } =
         this.state.user_data ?? [];
 
-      //Get the username of post
-      const username = this.state.post_user_data?.[author_fullname].name;
-
+      {console.log(this.state.post_data[0])}
       return (
         <>
           <Navbar
             subreddit_title={subreddit_name_prefixed}
             subreddit_logo={sub_icon_img}
-            post_user={username}
+            post_user={author}
             post_date={created_utc}
             current_username={name}
             current_user_karma={link_karma + comment_karma}
@@ -252,8 +218,10 @@ class Home extends React.Component {
           <Main
             title={title}
             type={post_hint}
-            image_url={url}
+            selftext_html={selftext_html}
+            url={url}
             image_props={preview}
+            thumbnail={thumbnail}
             media={media?.reddit_video?.fallback_url}
             iframe={secure_media_embed?.content}
             nextPost={this.getNextPost}

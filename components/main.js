@@ -7,7 +7,9 @@ import Switcher from "./posts/switcher";
 export default function Main({
   title,
   type,
-  image_url,
+  selftext_html,
+  thumbnail,
+  url,
   image_props,
   media,
   iframe,
@@ -21,9 +23,11 @@ export default function Main({
         <h1>{title}</h1>
         <Switcher
           type={type}
-          image_url={image_url}
+          html_text={selftext_html}
+          url={url}
           image_props={image_props}
           media={media}
+          thumbnail={thumbnail}
           iframe={iframe}
         />
       </div>

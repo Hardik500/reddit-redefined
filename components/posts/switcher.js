@@ -5,9 +5,11 @@ import { htmlDecode } from "../../utils/helper";
 
 export default function Switcher({
   type,
-  image_url,
+  html_text,
+  url,
   image_props,
   media,
+  thumbnail,
   iframe,
 }) {
   switch (type) {
@@ -15,14 +17,16 @@ export default function Switcher({
       return (
         <ImageContainer
           image_props={image_props.images[0].source}
-          url={image_url}
+          url={url}
         />
       );
     case "hosted:video":
-      return <video src={media} autoPlay></video>;
+      return <video src={media} autoPlay controls></video>;
     case "rich:video":
       return <div>{parse(htmlDecode(iframe))}</div>;
+    case "link":
+      return <div><a href={url}>{url}</a><br/><img src={thumbnail}/></div>
     default:
-      return <div></div>;
+      return <div>{parse(htmlDecode(html_text))}</div>;
   }
 }
