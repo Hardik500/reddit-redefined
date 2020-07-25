@@ -18,6 +18,7 @@ export default function Switcher({
         <ImageContainer
           image_props={image_props.images[0].source}
           url={url}
+          thumbnail={thumbnail}
         />
       );
     case "hosted:video":
