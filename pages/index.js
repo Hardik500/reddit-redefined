@@ -1,8 +1,6 @@
 //Library functions
 import Link from "next/link";
 import Router from "next/router";
-import Cookies from "js-cookie";
-import ReactHtmlParser from "react-html-parser";
 
 //API functions
 import {
@@ -17,10 +15,17 @@ import {
 
 //Components
 import Navbar from "../components/navbar";
-import UserCommunities from "../components/user_communities";
+import Main from "../components/main";
 
 //Helper functions
-import { isEmptyObject, getLatest } from "../utils/helper";
+import {
+  setLocal,
+  getLocal,
+  setCookie,
+  getCookie,
+  isEmptyObject,
+  getLatest,
+} from "../utils/helper";
 
 class Home extends React.Component {
   constructor(props) {
@@ -35,7 +40,6 @@ class Home extends React.Component {
       subreddit: {},
       after: null,
       counter: 1,
-      user_subreddit: null,
     };
   }
 
@@ -47,9 +51,9 @@ class Home extends React.Component {
       this.props.refresh_token != undefined
     ) {
       //Set the respective cookie values
-      document.cookie = `access_token=${this.props.access_token}; path = /`;
-      document.cookie = `refresh_token=${this.props.refresh_token}; path = /`;
-      document.cookie = `refresh_time = ${this.props.refresh_time}; path = /`;
+      setCookie("access_token", this.props.access_token);
+      setCookie("refresh_token", this.props.refresh_token);
+      setCookie("refresh_time", this.props.refresh_time);
 
       //Reroute page to / url
       Router.push("/");
@@ -58,23 +62,25 @@ class Home extends React.Component {
     //Access token got updated
     if (
       this.props.access_token != this.state.access_token ??
-      Cookies.get("access_token")
+      getCookie("access_token")
     ) {
-      document.cookie = `access_token=${this.props.access_token}; path = /`;
+      setCookie("access_token", this.props.access_token);
     }
 
     /* Access token is present in the cookies */
 
-    if (Cookies.get("refresh_token") ?? undefined) {
+    if (getCookie("refresh_token") ?? undefined) {
       this.setState({
-        access_token: Cookies.get("access_token"),
-        refresh_token: Cookies.get("refresh_token"),
+        access_token: getCookie("access_token"),
+        refresh_token: getCookie("refresh_token"),
         isLoggedIn: true,
       });
 
       /* Initially load the data for the app */
 
-      getRPopular(Cookies.get("access_token"))
+      this.loadInitialDate();
+
+      getRPopular(getCookie("access_token"))
         .then(({ data }) => {
           this.setState({
             post_data: data.children,
@@ -84,8 +90,10 @@ class Home extends React.Component {
         })
         .then(() => {
           getUserInformation(
-            Cookies.get("access_token"),
-            this.state.post_data.map((e) => e.data.author_fullname).toString()
+            getCookie("access_token"),
+            this.state.post_data
+              .map(({ data }) => data.author_fullname)
+              .toString()
           ).then((data) => {
             this.setState({
               post_user_data: data,
@@ -96,11 +104,7 @@ class Home extends React.Component {
           Router.push("/login");
         });
 
-      this.setState({
-        subreddit: JSON.parse(localStorage.getItem("subredditData")) ?? {},
-      });
-
-      getUserData(Cookies.get("access_token"))
+      getUserData(getCookie("access_token"))
         .then((data) => {
           this.setState({
             user_data: data,
@@ -109,21 +113,17 @@ class Home extends React.Component {
         .catch((err) => {
           Router.push("/login");
         });
-
-      getUserSubreddits(Cookies.get("access_token"))
-        .then((data) => {
-          this.setState({
-            user_subreddit: data.data.children,
-          });
-        })
-        .catch((err) => {
-          Router.push("/login");
-        });
     }
   }
 
+  loadInitialDate = () => {
+    this.setState({
+      subreddit: JSON.parse(getLocal("subredditData")) ?? {},
+    });
+  }
+
   setSubRedditData = async (subreddit) => {
-    getAboutOfSubreddit(Cookies.get("access_token"), subreddit).then(
+    getAboutOfSubreddit(getCookie("access_token"), subreddit).then(
       ({ data }) => {
         this.setState((prevState) => ({
           subreddit: {
@@ -135,7 +135,7 @@ class Home extends React.Component {
       }
     );
 
-    localStorage.setItem("subredditData", JSON.stringify(this.state.subreddit));
+    setLocal("subredditData", JSON.stringify(this.state.subreddit));
   };
 
   /* Run the function to get the latest data after the last post */
@@ -156,7 +156,7 @@ class Home extends React.Component {
       .then(() => {
         //Get the usernames
         getUserInformation(
-          Cookies.get("access_token"),
+          getCookie("access_token"),
           this.state.post_data
             .filter(
               (e) =>
@@ -175,12 +175,6 @@ class Home extends React.Component {
         });
       });
   };
-
-  htmlDecode(input) {
-    var e = document.createElement("div");
-    e.innerHTML = input;
-    return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
-  }
 
   /* Remove the first post and update the counter value */
 
@@ -230,6 +224,7 @@ class Home extends React.Component {
         media,
         secure_media_embed,
         url,
+        preview
       } = this.state.post_data[0].data;
 
       //Get the icon of the subreddit
@@ -254,27 +249,15 @@ class Home extends React.Component {
             current_user_karma={link_karma + comment_karma}
             current_user_profile={icon_img}
           ></Navbar>
-          <div style={{ display: "flex" }}>
-            <UserCommunities user_subreddit={this.state.user_subreddit} />
-            <div>
-              <button onClick={this.getNextPost}>Next Post</button>
-              <h1>{title}</h1>
-              {post_hint === "image" && (
-                <img src={url} width="460px" height="380px" />
-              )}
-              {post_hint === "hosted:video" && (
-                <video src={media.reddit_video.fallback_url} autoPlay></video>
-              )}
-              {post_hint === "rich:video" && (
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: this.htmlDecode(secure_media_embed.content),
-                  }}
-                />
-              )}
-            </div>
-            <UserCommunities user_subreddit={this.state.user_subreddit} />
-          </div>
+          <Main
+            title={title}
+            type={post_hint}
+            image_url={url}
+            image_props={preview}
+            media={media?.reddit_video?.fallback_url}
+            iframe={secure_media_embed?.content}
+            nextPost={this.getNextPost}
+          ></Main>
         </>
       );
     } else {
