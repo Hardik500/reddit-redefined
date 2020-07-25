@@ -78,10 +78,10 @@ class Home extends React.Component {
 
       /* Intially compare time of now and the next refresh_time */
       this.compareTime();
-      
+
       /* Initially load the data for the app */
       this.loadInitialDate();
-      
+
       /* Start the counter for the next time comparison */
       setInterval(this.compareTime, 1000 * 60 * 60);
     }
@@ -136,17 +136,18 @@ class Home extends React.Component {
 
   /* Set the relative information of each subreddit in an object */
   setSubRedditData = async (subreddit) => {
-    getAboutOfSubreddit(this.state.access_token ?? getCookie("access_token"), subreddit).then(
-      ({ data }) => {
-        this.setState((prevState) => ({
-          subreddit: {
-            // object that we want to update
-            ...prevState.subreddit, // keep all other key-value pairs
-            [subreddit]: data, // update the value of specific key
-          },
-        }));
-      }
-    );
+    getAboutOfSubreddit(
+      this.state.access_token ?? getCookie("access_token"),
+      subreddit
+    ).then(({ data }) => {
+      this.setState((prevState) => ({
+        subreddit: {
+          // object that we want to update
+          ...prevState.subreddit, // keep all other key-value pairs
+          [subreddit]: data, // update the value of specific key
+        },
+      }));
+    });
 
     setLocal("subredditData", JSON.stringify(this.state.subreddit));
   };
@@ -214,6 +215,8 @@ class Home extends React.Component {
         preview,
       } = this.state.post_data[0].data;
 
+      const { reddit_video } = media ?? {};
+
       //Get the icon of the subreddit
       const sub_icon_img =
         this.state.subreddit[subreddit]?.icon_img ?? undefined;
@@ -240,7 +243,7 @@ class Home extends React.Component {
             url={url}
             image_props={preview}
             thumbnail={thumbnail}
-            media={media?.reddit_video?.fallback_url}
+            media={reddit_video}
             iframe={secure_media_embed?.content}
             nextPost={this.getNextPost}
           ></Main>
