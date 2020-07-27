@@ -10,7 +10,9 @@ import {
   getRPopular,
   getBest,
   getAboutOfSubreddit,
+  hidePost,
   refreshAccessToken,
+  votePost,
 } from "../utils/api";
 
 //Components
@@ -19,6 +21,7 @@ import Main from "../components/main";
 
 //Helper functions
 import {
+  filterPosts,
   getCookie,
   getLocal,
   getLatest,
@@ -40,6 +43,7 @@ class Home extends React.Component {
       user_data: null,
       subreddit: {},
       after: null,
+      vote: 0,
     };
   }
 
@@ -96,11 +100,20 @@ class Home extends React.Component {
     /* Initial load the data from the subreddit */
     getRPopular(this.state.access_token ?? getCookie("access_token"))
       .then(({ data }) => {
+        let filtered = filterPosts(data.children);
+
         this.setState({
-          post_data: data.children,
+          post_data: filtered,
           after: getLatest(data.children),
         });
-        this.setSubRedditData(data.children[0].data.subreddit);
+
+        if (filtered.length < 5) {
+          this.getNewData(10);
+        }
+
+        if (filtered.length) {
+          this.setSubRedditData(filtered[0].data.subreddit);
+        }
       })
       .catch((err) => {
         Router.push("/login");
@@ -148,38 +161,47 @@ class Home extends React.Component {
 
   /* Run the function to get the latest data after the last post */
 
-  getNewData = async () => {
+  getNewData = async (limit = 5) => {
     getRPopular(
       this.state.access_token ?? getCookie("access_token"),
-      5,
+      limit,
       this.state.after
     ).then(({ data }) => {
-      data?.children &&
-        this.setState({
-          post_data: [...this.state.post_data, ...data.children],
-          after: getLatest(data.children),
-        });
+      let filtered = filterPosts(data.children);
+
+      if(filtered.length < 5){
+        this.getNewData(limit * 2);
+      }
+
+      this.setState({
+        post_data: [...this.state.post_data, ...filtered],
+        after: getLatest(data.children),
+      });
     });
   };
 
   /* Remove the first post */
 
-  getNextPost = async () => {
+  getNextPost = async (vote, id) => {
+    if (vote == 0) {
+      hidePost(this.state.access_token, "t3_" + id).then(() => {});
+    } else {
+      votePost(this.state.access_token, vote, "t3_" + id).then((data) => {});
+    }
+
     //Check if key already exists in the state
     if (!this.state.subreddit[this.state.post_data[1]?.data.subreddit]) {
       this.setSubRedditData(this.state.post_data[1]?.data.subreddit);
     }
 
-    console.log(this.state.post_data[0]);
-
     //Remove the first value of array
     this.setState({ post_data: reducePost(this.state.post_data) });
 
-    /* 
-      If the no of posts viewed is equal to 5,
+    /*
+      If the no of posts viewed is less than 5,
       then fetch new data
     */
-    if (!(this.state.post_data.length % 5)) {
+    if (this.state.post_data.length <= 5) {
       await this.getNewData();
     }
   };
@@ -199,17 +221,18 @@ class Home extends React.Component {
     if ((this.state.isLoggedIn && this.state.post_data?.length) || 0) {
       const {
         author,
+        created_utc,
+        id,
+        media,
+        post_hint,
+        preview,
+        secure_media_embed,
+        selftext_html,
         subreddit,
         subreddit_name_prefixed,
         title,
-        created_utc,
-        post_hint,
-        selftext_html,
-        media,
         thumbnail,
-        secure_media_embed,
         url,
-        preview,
       } = this.state.post_data[0].data;
 
       const { reddit_video } = media ?? {};
@@ -234,6 +257,7 @@ class Home extends React.Component {
             current_user_profile={icon_img}
           ></Navbar>
           <Main
+            id={id}
             title={title}
             type={post_hint}
             selftext_html={selftext_html}
