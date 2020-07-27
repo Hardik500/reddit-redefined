@@ -10,7 +10,7 @@ export default function Main({
   selftext_html,
   thumbnail,
   url,
-  image_props,
+  preview,
   media,
   iframe,
   nextPost,
@@ -26,7 +26,7 @@ export default function Main({
           type={type}
           html_text={selftext_html}
           url={url}
-          image_props={image_props}
+          preview={preview}
           media={media}
           thumbnail={thumbnail}
           iframe={iframe}

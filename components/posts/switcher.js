@@ -8,7 +8,7 @@ export default function Switcher({
   type,
   html_text,
   url,
-  image_props,
+  preview,
   media,
   thumbnail,
   iframe,
@@ -17,7 +17,7 @@ export default function Switcher({
     case "image":
       return (
         <ImageContainer
-          image_props={image_props.images[0].source}
+          image_props={preview.images[0].source}
           url={url}
           thumbnail={thumbnail}
         />
@@ -27,6 +27,9 @@ export default function Switcher({
     case "rich:video":
       return <div>{parse(htmlDecode(iframe))}</div>;
     case "link":
+      if(url.search(".gifv") != -1){
+        return ( <VideoContainer media={preview.reddit_video_preview}/> )
+      }
       return <div><a href={url}>{url}</a><br/><img src={thumbnail}/></div>
     default:
       return <div>{parse(htmlDecode(html_text))}</div>;
