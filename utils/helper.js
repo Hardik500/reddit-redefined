@@ -46,7 +46,12 @@ const reducePost = (post_data) => {
   return newDataArr;
 };
 
+const filterPosts = (post_data) => {
+  return post_data.filter((e) => e.data.likes == null)
+}
+
 module.exports = {
+  filterPosts,
   getCookie,
   getLatest,
   getLocal,
