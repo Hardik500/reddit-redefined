@@ -7,7 +7,7 @@ export default function VideoContainer({ media }) {
 
   return (
     <div
-      className={styles.videoContainer}
+      className={styles.container}
       style={{ paddingBottom: `${aspectRatio}%` }}
     >
       <video

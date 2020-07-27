@@ -1,8 +1,8 @@
-import parse from "html-react-parser";
 import ImageContainer from "./image_container";
 import VideoContainer from "./video_container";
-
-import { htmlDecode } from "../../utils/helper";
+import IframeContainer from "./iframe_container";
+import LinkContainer from "./link_container";
+import TextContainer from "./text_container";
 
 export default function Switcher({
   type,
@@ -21,17 +21,17 @@ export default function Switcher({
           url={url}
           thumbnail={thumbnail}
         />
-        )
+      );
     case "hosted:video":
-      return ( <VideoContainer media={media}/> )
+      return <VideoContainer media={media} />;
     case "rich:video":
-      return <div>{parse(htmlDecode(iframe))}</div>;
+      return <IframeContainer iframe={iframe} />;
     case "link":
-      if(url.search(".gifv") != -1){
-        return ( <VideoContainer media={preview.reddit_video_preview}/> )
+      if (url.search(".gifv") != -1) {
+        return <VideoContainer media={preview.reddit_video_preview} />;
       }
-      return <div><a href={url}>{url}</a><br/><img src={thumbnail}/></div>
+      return <LinkContainer url={url} thumbnail={thumbnail} />;
     default:
-      return <div>{parse(htmlDecode(html_text))}</div>;
+      return <TextContainer htmlText={html_text} url={url} thumbnail={thumbnail}/>;
   }
 }
