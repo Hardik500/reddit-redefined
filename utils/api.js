@@ -72,7 +72,12 @@ const getPopularSubereddits = async (token) =>
     .then((res) => res.data)
     .catch((err) => err);
 
-const getRPopular = async (token , limit = 10, afterId = null, category = "hot") =>
+const getRPopular = async (
+  token,
+  limit = 10,
+  afterId = null,
+  category = "hot"
+) =>
   await axios
     .get(
       `${oauth}/r/popular/${category}?limit=${limit}&g=GLOBAL&after=${afterId}&count=${limit}`,
@@ -115,7 +120,28 @@ const getAboutOfSubreddit = async (token, subredditName = "technology") =>
     .then((res) => res.data)
     .catch((err) => err);
 
+const votePost = async (token, dir, id) =>
+  await axios
+    .post(`${oauth}/api/vote?dir=${dir}&id=${id}`, null, {
+      headers: {
+        Authorization: `bearer ${token}`,
+      },
+    })
+    .then((res) => res)
+    .catch((err) => err);
+
+const hidePost = async (token, id) =>
+  await axios
+    .post(`${oauth}/api/hide?id=${id}`, null, {
+      headers: {
+        Authorization: `bearer ${token}`,
+      },
+    })
+    .then((res) => res)
+    .catch((err) => err);
+
 module.exports = {
+  generateTempCode,
   getAboutOfSubreddit,
   getUserInformation,
   getBest,
@@ -123,6 +149,7 @@ module.exports = {
   getPopularSubereddits,
   getUserSubreddits,
   getUserData,
+  hidePost,
   refreshAccessToken,
-  generateTempCode,
+  votePost,
 };
