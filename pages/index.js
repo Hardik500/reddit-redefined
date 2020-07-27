@@ -77,13 +77,13 @@ class Home extends React.Component {
       });
 
       /* Intially compare time of now and the next refresh_time */
-      this.compareTime();
+      this.updateToken();
 
       /* Initially load the data for the app */
       this.loadInitialDate();
 
       /* Start the counter for the next time comparison */
-      setInterval(this.compareTime, 1000 * 60 * 60);
+      setInterval(this.updateToken, 1000 * 60 * 25);
     }
   }
 
@@ -118,20 +118,14 @@ class Home extends React.Component {
       });
   };
 
-  compareTime = async () => {
-    //get the mins of the current time
-    let currentDate = new Date();
-    let nextDate = new Date(getCookie("refresh_time"));
-
-    if (currentDate >= nextDate) {
-      const data = await refreshAccessToken(getCookie("refresh_token"));
-      const newDate = new Date(new Date().getTime() + 60 * 60 * 1000);
-      setCookie("access_token", data.access_token);
-      setCookie("refresh_time", newDate);
-      this.setState({
-        access_token: data.access_token,
-      });
-    }
+  updateToken = async () => {
+    const data = await refreshAccessToken(getCookie("refresh_token"));
+    const newDate = new Date(new Date().getTime() + 60 * 60 * 1000);
+    setCookie("access_token", data.access_token);
+    setCookie("refresh_time", newDate);
+    this.setState({
+      access_token: data.access_token,
+    });
   };
 
   /* Set the relative information of each subreddit in an object */
@@ -160,10 +154,11 @@ class Home extends React.Component {
       5,
       this.state.after
     ).then(({ data }) => {
-      this.setState({
-        post_data: [...this.state.post_data, ...data.children],
-        after: getLatest(data.children),
-      });
+      data?.children &&
+        this.setState({
+          post_data: [...this.state.post_data, ...data.children],
+          after: getLatest(data.children),
+        });
     });
   };
 
@@ -174,6 +169,8 @@ class Home extends React.Component {
     if (!this.state.subreddit[this.state.post_data[1]?.data.subreddit]) {
       this.setSubRedditData(this.state.post_data[1]?.data.subreddit);
     }
+
+    console.log(this.state.post_data[0]);
 
     //Remove the first value of array
     this.setState({ post_data: reducePost(this.state.post_data) });
@@ -241,7 +238,7 @@ class Home extends React.Component {
             type={post_hint}
             selftext_html={selftext_html}
             url={url}
-            image_props={preview}
+            preview={preview}
             thumbnail={thumbnail}
             media={reddit_video}
             iframe={secure_media_embed?.content}
