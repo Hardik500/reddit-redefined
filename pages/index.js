@@ -105,7 +105,7 @@ class Home extends React.Component {
 
         this.setState({
           post_data: filtered,
-          after: getLatest(data.children),
+          after: getLatest("t3",data.children),
         });
 
         if (filtered.length < 5) {
@@ -170,7 +170,7 @@ class Home extends React.Component {
       if (data?.children.length) {
         //Set the id of the last post
         this.setState({
-          after: getLatest(data.children),
+          after: getLatest("t3", data.children),
         });
 
         //Remove voted posts
@@ -199,9 +199,9 @@ class Home extends React.Component {
 
   getNextPost = async (vote, id) => {
     if (vote == 0) {
-      hidePost(this.state.access_token, "t3_" + id).then(() => {});
+      await votePost(this.state.access_token, vote, "t3_" + id);
     } else {
-      votePost(this.state.access_token, vote, "t3_" + id).then((data) => {});
+      await hidePost(this.state.access_token, "t3_" + id);
     }
 
     //Check if key already exists in the state
@@ -282,6 +282,8 @@ class Home extends React.Component {
             media={reddit_video}
             iframe={secure_media_embed?.content}
             nextPost={this.getNextPost}
+            userSubs={JSON.parse(getLocal("personalSubs")) ?? []}
+            favSubs={JSON.parse(getLocal("favoriteSubs")) ?? []}
           ></Main>
         </>
       );
