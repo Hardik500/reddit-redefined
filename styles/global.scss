@@ -14,8 +14,23 @@ body {
   background-color: $primary-color;
   color: $white-color;
   font-family: $font-stack;
+  overflow-y: hidden;
 }
 
 * {
   box-sizing: border-box;
+}
+
+/* Scroll 1 */
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #dfdfdf;
+  border-radius: 10px;
 }

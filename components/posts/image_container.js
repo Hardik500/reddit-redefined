@@ -5,7 +5,7 @@ export default function ImageContainer({ url, image_props, thumbnail }) {
   const [isLoaded, setIsLoaded] = React.useState(false);
 
   return (
-    <div className={styles.imageContainer}>
+    <div className={styles.container}>
       <img
         height={`${image_props.height}px`}
         width={`${image_props.width}px`}

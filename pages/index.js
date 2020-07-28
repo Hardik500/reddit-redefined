@@ -10,7 +10,9 @@ import {
   getRPopular,
   getBest,
   getAboutOfSubreddit,
+  hidePost,
   refreshAccessToken,
+  votePost,
 } from "../utils/api";
 
 //Components
@@ -19,6 +21,7 @@ import Main from "../components/main";
 
 //Helper functions
 import {
+  filterPosts,
   getCookie,
   getLocal,
   getLatest,
@@ -37,9 +40,11 @@ class Home extends React.Component {
       refresh_token: null,
       isLoggedIn: false,
       post_data: null,
+      noPostLeft: false,
       user_data: null,
       subreddit: {},
       after: null,
+      vote: 0,
     };
   }
 
@@ -96,11 +101,20 @@ class Home extends React.Component {
     /* Initial load the data from the subreddit */
     getRPopular(this.state.access_token ?? getCookie("access_token"))
       .then(({ data }) => {
+        let filtered = filterPosts(data.children);
+
         this.setState({
-          post_data: data.children,
-          after: getLatest(data.children),
+          post_data: filtered,
+          after: getLatest("t3",data.children),
         });
-        this.setSubRedditData(data.children[0].data.subreddit);
+
+        if (filtered.length < 5) {
+          this.getNewData();
+        }
+
+        if (filtered.length) {
+          this.setSubRedditData(filtered[0].data.subreddit);
+        }
       })
       .catch((err) => {
         Router.push("/login");
@@ -151,35 +165,58 @@ class Home extends React.Component {
   getNewData = async () => {
     getRPopular(
       this.state.access_token ?? getCookie("access_token"),
-      5,
       this.state.after
     ).then(({ data }) => {
-      data?.children &&
+      if (data?.children.length) {
+        //Set the id of the last post
         this.setState({
-          post_data: [...this.state.post_data, ...data.children],
-          after: getLatest(data.children),
+          after: getLatest("t3", data.children),
         });
+
+        //Remove voted posts
+        let filtered = filterPosts(data.children);
+
+        //If we have data in filtered then only destructure it
+        if (filtered.length) {
+          this.setState({
+            post_data: [...this.state.post_data, ...filtered],
+          });
+        }
+        
+        // Fetch new data if filtered array is smaller
+        if (filtered.length < 5) {
+          this.getNewData();
+        }
+      } else {
+        this.setState({
+          noPostLeft: true,
+        });
+      }
     });
   };
 
   /* Remove the first post */
 
-  getNextPost = async () => {
+  getNextPost = async (vote, id) => {
+    if (vote == 0) {
+      await votePost(this.state.access_token, vote, "t3_" + id);
+    } else {
+      await hidePost(this.state.access_token, "t3_" + id);
+    }
+
     //Check if key already exists in the state
     if (!this.state.subreddit[this.state.post_data[1]?.data.subreddit]) {
       this.setSubRedditData(this.state.post_data[1]?.data.subreddit);
     }
 
-    console.log(this.state.post_data[0]);
-
     //Remove the first value of array
     this.setState({ post_data: reducePost(this.state.post_data) });
 
-    /* 
-      If the no of posts viewed is equal to 5,
+    /*
+      If the no of posts viewed is less than 5,
       then fetch new data
     */
-    if (!(this.state.post_data.length % 5)) {
+    if (this.state.post_data.length <= 5) {
       await this.getNewData();
     }
   };
@@ -199,17 +236,18 @@ class Home extends React.Component {
     if ((this.state.isLoggedIn && this.state.post_data?.length) || 0) {
       const {
         author,
+        created_utc,
+        id,
+        media,
+        post_hint,
+        preview,
+        secure_media_embed,
+        selftext_html,
         subreddit,
         subreddit_name_prefixed,
         title,
-        created_utc,
-        post_hint,
-        selftext_html,
-        media,
         thumbnail,
-        secure_media_embed,
         url,
-        preview,
       } = this.state.post_data[0].data;
 
       const { reddit_video } = media ?? {};
@@ -234,6 +272,7 @@ class Home extends React.Component {
             current_user_profile={icon_img}
           ></Navbar>
           <Main
+            id={id}
             title={title}
             type={post_hint}
             selftext_html={selftext_html}
@@ -243,9 +282,14 @@ class Home extends React.Component {
             media={reddit_video}
             iframe={secure_media_embed?.content}
             nextPost={this.getNextPost}
+            userSubs={JSON.parse(getLocal("personalSubs")) ?? []}
+            favSubs={JSON.parse(getLocal("favoriteSubs")) ?? []}
           ></Main>
         </>
       );
+    } else if (this.state.noPostLeft) {
+      /* If nothing is there show the loader */
+      return <div>No posts left</div>;
     } else {
       /* If nothing is there show the loader */
       return <div>Loading...</div>;

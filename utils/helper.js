@@ -6,7 +6,7 @@ const isEmptyObject = (query) => {
   return true;
 };
 
-const getLatest = (posts) => "t3_" + posts[posts.length - 1].data.id;
+const getLatest = (kind = "t3",posts) =>  kind + "_" + posts[posts.length - 1].data.id;
 
 const setCookie = (key, value) => {
   document.cookie = `${key}=${value}; path = /`;
@@ -46,7 +46,13 @@ const reducePost = (post_data) => {
   return newDataArr;
 };
 
+const filterPosts = (post_data) => post_data.filter((e) => e.data.likes == null)
+
+const favoriteSub = (post_data) => post_data.filter((e) => e.data.user_has_favorited)
+
 module.exports = {
+  favoriteSub,
+  filterPosts,
   getCookie,
   getLatest,
   getLocal,
