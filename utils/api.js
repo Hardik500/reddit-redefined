@@ -52,9 +52,9 @@ const getUserData = async (token) =>
     .then((res) => res.data)
     .catch((err) => err);
 
-const getUserSubreddits = async (token) =>
+const getUserSubreddits = async (token, afterId = null) =>
   await axios
-    .get(`${oauth}/subreddits/mine/subscriber?limit=25`, {
+    .get(`${oauth}/subreddits/mine/subscriber?limit=10&after=${afterId}&count=10`, {
       headers: {
         Authorization: `bearer ${token}`,
       },
