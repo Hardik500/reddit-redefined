@@ -40,6 +40,7 @@ class Home extends React.Component {
       refresh_token: null,
       isLoggedIn: false,
       post_data: null,
+      noPostLeft: false,
       user_data: null,
       subreddit: {},
       after: null,
@@ -108,7 +109,7 @@ class Home extends React.Component {
         });
 
         if (filtered.length < 5) {
-          this.getNewData(10);
+          this.getNewData();
         }
 
         if (filtered.length) {
@@ -161,22 +162,36 @@ class Home extends React.Component {
 
   /* Run the function to get the latest data after the last post */
 
-  getNewData = async (limit = 5) => {
+  getNewData = async () => {
     getRPopular(
       this.state.access_token ?? getCookie("access_token"),
-      limit,
       this.state.after
     ).then(({ data }) => {
-      let filtered = filterPosts(data.children);
+      if (data?.children.length) {
+        //Set the id of the last post
+        this.setState({
+          after: getLatest(data.children),
+        });
 
-      if(filtered.length < 5){
-        this.getNewData(limit * 2);
+        //Remove voted posts
+        let filtered = filterPosts(data.children);
+
+        //If we have data in filtered then only destructure it
+        if (filtered.length) {
+          this.setState({
+            post_data: [...this.state.post_data, ...filtered],
+          });
+        }
+        
+        // Fetch new data if filtered array is smaller
+        if (filtered.length < 5) {
+          this.getNewData();
+        }
+      } else {
+        this.setState({
+          noPostLeft: true,
+        });
       }
-
-      this.setState({
-        post_data: [...this.state.post_data, ...filtered],
-        after: getLatest(data.children),
-      });
     });
   };
 
@@ -270,6 +285,9 @@ class Home extends React.Component {
           ></Main>
         </>
       );
+    } else if (this.state.noPostLeft) {
+      /* If nothing is there show the loader */
+      return <div>No posts left</div>;
     } else {
       /* If nothing is there show the loader */
       return <div>Loading...</div>;
