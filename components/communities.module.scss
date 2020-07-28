@@ -1,0 +1,105 @@
+@import url("https://fonts.googleapis.com/css2?family=Righteous&display=swap");
+
+$white-color: #fff;
+
+.horz {
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  overflow-y: scroll;
+  height: 85%;
+}
+
+.border_white {
+  border: 1px solid white;
+  margin: 10px 10px 20px 10px;
+}
+
+.heading {
+  margin: 10px auto;
+}
+
+.subreddit_icon {
+  margin: 4px 10px;
+
+  img {
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 2px solid $white-color;
+    background: #0079d3;
+  }
+}
+
+.subbredit_name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.subreddit_icon_load {
+  height: 30px;
+  width: 35px;
+  margin: 5px 10px;
+  border-radius: 50%;
+  background-color: gray;
+  position: relative;
+  overflow: hidden;
+}
+
+.subbredit_name_load {
+  height: 30px;
+  width: 100%;
+  border-radius: 4px;
+  background-color: gray;
+  position: relative;
+  overflow: hidden;
+}
+
+.load::before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: -100px;
+  top: 0;
+  height: 100%;
+  width: 100px;
+  background: linear-gradient(
+    90deg,
+    gray 0%,
+    rgba(181, 181, 181, 0.7) 21%,
+    rgba(177, 177, 177, 0.8) 49%,
+    rgba(176, 173, 173, 0.9) 73%,
+    gray 100%
+  );
+  animation: loading 1.5s infinite ease-in-out;
+}
+
+@keyframes loading {
+  from {
+    left: -100px;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+.feed_icons {
+  flex-grow: 0;
+  height: 30px;
+  max-height: 30px;
+  max-width: 30px;
+  width: 30px;
+  color: #0079d3;
+  fill: #0079d3;
+}
+
+.selection {
+  &:hover {
+    border: 2px solid white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+}
