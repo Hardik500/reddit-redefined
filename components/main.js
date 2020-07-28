@@ -73,7 +73,7 @@ class Main extends React.Component {
       .catch((err) => console.log(err));
   };
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     setLocal("personalSubs", JSON.stringify(this.state.user_subreddit));
     setLocal("favoriteSubs", JSON.stringify(this.state.user_fav));
   }

@@ -38,7 +38,7 @@ class Home extends React.Component {
       access_token: null,
       refresh_token: null,
       isLoggedIn: false,
-      post_data: null,
+      post_data: [],
       noPostLeft: false,
       user_data: null,
       subreddit: {},
@@ -98,7 +98,10 @@ class Home extends React.Component {
     });
 
     /* Initial load the data from the subreddit */
-    getXSubreddit(this.state.access_token ?? getCookie("access_token"))
+    getXSubreddit(
+      this.state.access_token ?? getCookie("access_token"),
+      this.state.selected
+    )
       .then(({ data }) => {
         let filtered = filterPosts(data.children);
 
@@ -161,10 +164,14 @@ class Home extends React.Component {
 
   /* Run the function to get the latest data after the last post */
 
-  getNewData = async () => {
+  getNewData = async (
+    selected = this.state.selected,
+    after = this.state.after
+  ) => {
     getXSubreddit(
       this.state.access_token ?? getCookie("access_token"),
-      this.state.after
+      selected,
+      after
     ).then(({ data }) => {
       if (data?.children.length) {
         //Set the id of the last post
@@ -197,7 +204,7 @@ class Home extends React.Component {
   /* Remove the first post */
 
   getNextPost = async (vote, id) => {
-    if (vote == 0) {
+    if (vote) {
       await votePost(this.state.access_token, vote, "t3_" + id);
     } else {
       await hidePost(this.state.access_token, "t3_" + id);
@@ -220,11 +227,17 @@ class Home extends React.Component {
     }
   };
 
-  setSelectedSub = (subName) => {
+  setSelectedSub = async (subName) => {
     this.setState({
-      selected: subName
-    })
-  }
+      selected: subName,
+      post_data: [],
+      after: [],
+    });
+    if(subName !== "Popular" || subName !== "All" || subName !== "Home"){
+      await this.setSubRedditData(subName);
+    }
+    await this.getNewData(subName, null);
+  };
 
   render() {
     /* No query is passed in the url and the user is not logged in */
@@ -237,8 +250,7 @@ class Home extends React.Component {
     }
 
     /* The user is logged in */
-
-    if ((this.state.isLoggedIn && this.state.post_data?.length) || 0) {
+    if (this.state.isLoggedIn) {
       const {
         author,
         created_utc,
@@ -253,47 +265,79 @@ class Home extends React.Component {
         title,
         thumbnail,
         url,
-      } = this.state.post_data[0].data;
+      } = this.state.post_data[0]?.data ?? [];
 
       const { reddit_video } = media ?? {};
 
       //Get the icon of the subreddit
       const sub_icon_img =
         this.state.subreddit[subreddit]?.icon_img ?? undefined;
-
+      
       //Ge the info of current user
       const { name, link_karma, comment_karma, icon_img } =
         this.state.user_data ?? [];
 
-      return (
-        <>
-          <Navbar
-            subreddit_title={subreddit_name_prefixed}
-            subreddit_logo={sub_icon_img}
-            post_user={author}
-            post_date={created_utc}
-            current_username={name}
-            current_user_karma={link_karma + comment_karma}
-            current_user_profile={icon_img}
-          ></Navbar>
-          <Main
-            id={id}
-            title={title}
-            type={post_hint}
-            selftext_html={selftext_html}
-            url={url}
-            preview={preview}
-            thumbnail={thumbnail}
-            selected={this.state.selected}
-            setSelectedSub={this.setSelectedSub}
-            media={reddit_video}
-            iframe={secure_media_embed?.content}
-            nextPost={this.getNextPost}
-            userSubs={JSON.parse(getLocal("personalSubs")) ?? []}
-            favSubs={JSON.parse(getLocal("favoriteSubs")) ?? []}
-          ></Main>
-        </>
-      );
+      if (this.state.post_data.length) {
+        return (
+          <>
+            <Navbar
+              subreddit_title={subreddit_name_prefixed}
+              subreddit_logo={sub_icon_img}
+              post_user={author}
+              post_date={created_utc}
+              current_username={name}
+              current_user_karma={link_karma + comment_karma}
+              current_user_profile={icon_img}
+            ></Navbar>
+            <Main
+              id={id}
+              title={title}
+              type={post_hint}
+              selftext_html={selftext_html}
+              url={url}
+              preview={preview}
+              thumbnail={thumbnail}
+              selected={this.state.selected}
+              setSelectedSub={this.setSelectedSub}
+              media={reddit_video}
+              iframe={secure_media_embed?.content}
+              nextPost={this.getNextPost}
+              userSubs={JSON.parse(getLocal("personalSubs")) ?? []}
+              favSubs={JSON.parse(getLocal("favoriteSubs")) ?? []}
+            ></Main>
+          </>
+        );
+      } else {
+        return (
+          <>
+            <Navbar
+              subreddit_title={subreddit_name_prefixed}
+              subreddit_logo={sub_icon_img}
+              post_user={author}
+              post_date={created_utc ?? Date.now()/1000}
+              current_username={name}
+              current_user_karma={link_karma + comment_karma}
+              current_user_profile={icon_img}
+            ></Navbar>
+            <Main
+              id={id}
+              title={title}
+              type={post_hint}
+              selftext_html={selftext_html}
+              url={url}
+              preview={preview}
+              thumbnail={thumbnail}
+              selected={this.state.selected}
+              setSelectedSub={this.setSelectedSub}
+              media={reddit_video}
+              iframe={secure_media_embed?.content}
+              nextPost={this.getNextPost}
+              userSubs={JSON.parse(getLocal("personalSubs")) ?? []}
+              favSubs={JSON.parse(getLocal("favoriteSubs")) ?? []}
+            ></Main>
+          </>
+        );
+      }
     } else if (this.state.noPostLeft) {
       /* If nothing is there show the loader */
       return <div>No posts left</div>;
