@@ -5,10 +5,8 @@ import Router from "next/router";
 //API functions
 import {
   getUserData,
-  getUserSubreddits,
-  getPopularSubereddits,
-  getRPopular,
   getBest,
+  getXSubreddit,
   getAboutOfSubreddit,
   hidePost,
   refreshAccessToken,
@@ -30,12 +28,13 @@ import {
   setLocal,
   reducePost,
 } from "../utils/helper";
-import cookies from "next-cookies";
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      selected: "funny",
+      category: "Best",
       access_token: null,
       refresh_token: null,
       isLoggedIn: false,
@@ -99,13 +98,13 @@ class Home extends React.Component {
     });
 
     /* Initial load the data from the subreddit */
-    getRPopular(this.state.access_token ?? getCookie("access_token"))
+    getXSubreddit(this.state.access_token ?? getCookie("access_token"))
       .then(({ data }) => {
         let filtered = filterPosts(data.children);
 
         this.setState({
           post_data: filtered,
-          after: getLatest("t3",data.children),
+          after: getLatest("t3", data.children),
         });
 
         if (filtered.length < 5) {
@@ -163,7 +162,7 @@ class Home extends React.Component {
   /* Run the function to get the latest data after the last post */
 
   getNewData = async () => {
-    getRPopular(
+    getXSubreddit(
       this.state.access_token ?? getCookie("access_token"),
       this.state.after
     ).then(({ data }) => {
@@ -182,7 +181,7 @@ class Home extends React.Component {
             post_data: [...this.state.post_data, ...filtered],
           });
         }
-        
+
         // Fetch new data if filtered array is smaller
         if (filtered.length < 5) {
           this.getNewData();
@@ -220,6 +219,12 @@ class Home extends React.Component {
       await this.getNewData();
     }
   };
+
+  setSelectedSub = (subName) => {
+    this.setState({
+      selected: subName
+    })
+  }
 
   render() {
     /* No query is passed in the url and the user is not logged in */
@@ -279,6 +284,8 @@ class Home extends React.Component {
             url={url}
             preview={preview}
             thumbnail={thumbnail}
+            selected={this.state.selected}
+            setSelectedSub={this.setSelectedSub}
             media={reddit_video}
             iframe={secure_media_embed?.content}
             nextPost={this.getNextPost}

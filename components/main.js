@@ -85,18 +85,29 @@ class Main extends React.Component {
       type,
       selftext_html,
       thumbnail,
+      selected,
       url,
       preview,
       media,
       iframe,
       nextPost,
+      setSelectedSub,
     } = this.props;
 
     return (
       <div className={styles.flexContainer}>
         <Sidebar>
-          <Feed title="Reddit Feeds" />
-          <Communities title="Favorites" user_subreddit={this.state.user_fav} />
+          <Feed
+            title="Reddit Feeds"
+            selected={selected}
+            setSelectedSub={setSelectedSub}
+          />
+          <Communities
+            title="Favorites"
+            user_subreddit={this.state.user_fav}
+            selected={selected}
+            setSelectedSub={setSelectedSub}
+          />
         </Sidebar>
         <div className={styles.container}>
           <button onClick={() => nextPost(1, id)}>Upvote</button>
@@ -119,6 +130,8 @@ class Main extends React.Component {
           <Communities
             title="Your Communities"
             user_subreddit={this.state.user_subreddit}
+            selected={selected}
+            setSelectedSub={setSelectedSub}
           />
         </Sidebar>
       </div>

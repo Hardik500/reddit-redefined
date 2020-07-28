@@ -1,12 +1,12 @@
 import styles from "./communities.module.scss";
 
-export default function Feed({ title }) {
+export default function Feed({ title, selected, setSelectedSub }) {
   return (
     <>
       <div className={styles.heading}>{title}</div>
       <div className={styles.border_white} />
       <div className={styles.container}>
-        <div className={[styles.horz, styles.selection].join(" ")}>
+        <div className={[styles.horz, styles.selection, selected == "Home" ? styles.selected : ""].join(" ")} onClick={(e) => setSelectedSub("Home")}>
           <div className={styles.subreddit_icon}>
             <svg
               className={styles.feed_icons}
@@ -21,7 +21,7 @@ export default function Feed({ title }) {
           </div>
           <div className={styles.subbredit_name}>Home</div>
         </div>
-        <div className={[styles.horz, styles.selection].join(" ")}>
+        <div className={[styles.horz, styles.selection, selected == "Popular" ? styles.selected : ""].join(" ")} onClick={(e) => setSelectedSub("Popular")}>
           <div className={styles.subreddit_icon}>
             <svg
               className={styles.feed_icons}
@@ -33,7 +33,7 @@ export default function Feed({ title }) {
           </div>
           <div className={styles.subbredit_name}>Popular</div>
         </div>
-        <div className={[styles.horz, styles.selection].join(" ")}>
+        <div className={[styles.horz, styles.selection, selected == "All" ? styles.selected : ""].join(" ")} onClick={(e) => setSelectedSub("All")}>
           <div className={styles.subreddit_icon}>
             <svg
               className={styles.feed_icons}

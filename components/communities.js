@@ -31,8 +31,7 @@ class Communities extends React.Component {
   }
 
   render() {
-    const { user_subreddit, title } = this.props;
-
+    const { user_subreddit, title, selected, setSelectedSub } = this.props;
     return (
       <>
         <div className={styles.heading}>{title}</div>
@@ -41,7 +40,7 @@ class Communities extends React.Component {
           {(user_subreddit.length &&
             user_subreddit?.map(({ data }) => {
               return (
-                <div className={[styles.horz, styles.selection].join(" ")} key={data.name}>
+                <div className={[styles.horz, styles.selection, selected == data.display_name ? styles.selected : ""].join(" ")} key={data.name} onClick={(e) => setSelectedSub(data.display_name)}>
                   <div className={styles.subreddit_icon}>
                     <SubredditIcon icon_img={data.icon_img} />
                   </div>
