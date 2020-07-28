@@ -103,3 +103,10 @@ $white-color: #fff;
     cursor: pointer;
   }
 }
+
+.selected {
+  background-color: white;
+  color: black;
+  border-radius: 5px;
+  margin: 2px auto;
+}

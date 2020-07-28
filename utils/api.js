@@ -54,11 +54,14 @@ const getUserData = async (token) =>
 
 const getUserSubreddits = async (token, afterId = null) =>
   await axios
-    .get(`${oauth}/subreddits/mine/subscriber?limit=10&after=${afterId}&count=10`, {
-      headers: {
-        Authorization: `bearer ${token}`,
-      },
-    })
+    .get(
+      `${oauth}/subreddits/mine/subscriber?limit=10&after=${afterId}&count=10`,
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      }
+    )
     .then((res) => res.data)
     .catch((err) => err);
 
@@ -72,14 +75,23 @@ const getPopularSubereddits = async (token) =>
     .then((res) => res.data)
     .catch((err) => err);
 
-const getRPopular = async (
-  token,
-  afterId = null,
-  category = "hot"
-) =>
+// const getRPopular = async (token, afterId = null, category = "hot") =>
+//   await axios
+//     .get(
+//       `${oauth}/r/popular/${category}?limit=10&g=GLOBAL&after=${afterId}&count=10`,
+//       {
+//         headers: {
+//           Authorization: `bearer ${token}`,
+//         },
+//       }
+//     )
+//     .then((res) => res.data)
+//     .catch((err) => err);
+
+const getXSubreddit = async (token, sub = "popular", afterId = null, category = "hot") =>
   await axios
     .get(
-      `${oauth}/r/popular/${category}?limit=10&g=GLOBAL&after=${afterId}&count=10`,
+      `${oauth}/r/${sub}/${category}?limit=10&after=${afterId}&count=10`,
       {
         headers: {
           Authorization: `bearer ${token}`,
@@ -144,10 +156,10 @@ module.exports = {
   getAboutOfSubreddit,
   getUserInformation,
   getBest,
-  getRPopular,
   getPopularSubereddits,
   getUserSubreddits,
   getUserData,
+  getXSubreddit,
   hidePost,
   refreshAccessToken,
   votePost,
