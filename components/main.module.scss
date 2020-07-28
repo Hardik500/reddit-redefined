@@ -7,9 +7,126 @@
   font-family: "Palanquin Dark", sans-serif;
   font-size: 24px;
   background-color: black;
-  width: 50vw;
+  height: 87vh;
+  margin: 15px 0;
+  padding: 10px 20px;
+  width: 100%;
+  border-radius: 10px;
 }
 
 .posts {
+  height: 65vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.parent {
+  display: flex;
+  flex-direction: column;
+}
+
+.div_posts {
+}
+
+.div_comments {
+  height: 5vh;
+}
+
+.div_title {
+  max-height: 25vh;
+  height: auto;
+
+  p {
+    text-align: justify;
+    line-height: 1.2em;
+  }
+}
+
+.div_left_vote {
+  display: flex;
+  flex-direction: column;
+  margin: 0 10px;
+  justify-content: space-evenly;
+}
+
+.div_right_vote {
+  display: flex;
+  flex-direction: column;
+  margin: 0 10px;
+  justify-content: space-evenly;
+}
+
+.div_title_load {
+  height: 5vh;
+  width: 100%;
+  border-radius: 4px;
+  background-color: rgb(128 128 128 / 18%);
+  position: relative;
+  overflow: hidden;
+  margin: 10px auto 10px auto;
+}
+
+.div_post_load {
+  height: 65vh;
+  width: 100%;
+  border-radius: 4px;
+  background-color: rgb(128 128 128 / 18%);
+  position: relative;
+  overflow: hidden;
+}
+
+.load::before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: -100px;
+  top: 0;
   height: 100%;
+  width: 100px;
+  background: linear-gradient(
+    90deg,
+    rgb(128 128 128 / 18%) 0%,
+    rgb(128 128 128 / 28%) 25%,
+    rgb(128 128 128 / 38%) 50%,
+    rgb(128 128 128 / 28%) 75%,
+    rgb(128 128 128 / 18%) 100%
+  );
+  animation: loading 1.5s infinite ease-in-out;
+}
+
+@keyframes loading {
+  from {
+    left: -100px;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+.upvote {
+  &:hover {
+    transform: scale(1.05);
+    fill: #cc3700;
+    cursor: pointer;
+  }
+}
+
+.upvotes {
+  line-height: 0;
+}
+
+.downvote {
+  &:hover {
+    transform: scale(1.05);
+    fill: #5a75cc;
+    cursor: pointer;
+  }
+}
+
+.hide{
+  &:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
 }
