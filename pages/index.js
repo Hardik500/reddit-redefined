@@ -258,6 +258,7 @@ class Home extends React.Component {
         media,
         post_hint,
         preview,
+        permalink,
         secure_media_embed,
         selftext_html,
         subreddit,
@@ -265,7 +266,10 @@ class Home extends React.Component {
         title,
         thumbnail,
         url,
+        ups,
       } = this.state.post_data[0]?.data ?? [];
+
+      console.log(this.state.post_data[0]?.data);
 
       const { reddit_video } = media ?? {};
 
@@ -296,12 +300,14 @@ class Home extends React.Component {
               selftext_html={selftext_html}
               url={url}
               preview={preview}
+              permalink={permalink}
               thumbnail={thumbnail}
               selected={this.state.selected}
               setSelectedSub={this.setSelectedSub}
               media={reddit_video}
               iframe={secure_media_embed?.content}
               nextPost={this.getNextPost}
+              upvotes={ups}
               userSubs={JSON.parse(getLocal("personalSubs")) ?? []}
               favSubs={JSON.parse(getLocal("favoriteSubs")) ?? []}
             ></Main>
@@ -319,8 +325,8 @@ class Home extends React.Component {
               current_user_karma={link_karma + comment_karma}
               current_user_profile={icon_img}
             ></Navbar>
+            {console.log(permalink)}
             <Main
-              id={id}
               title={title}
               type={post_hint}
               selftext_html={selftext_html}

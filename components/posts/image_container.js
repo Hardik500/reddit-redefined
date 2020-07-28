@@ -1,8 +1,9 @@
-import React from "react";
+import React, {useState} from "react";
+
 import styles from "./image_container.module.scss";
 
 export default function ImageContainer({ url, image_props, thumbnail }) {
-  const [isLoaded, setIsLoaded] = React.useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   return (
     <div className={styles.container}>
@@ -17,7 +18,7 @@ export default function ImageContainer({ url, image_props, thumbnail }) {
         onLoad={() => {
           setIsLoaded(true);
         }}
-        className={[styles.image, styles.full].join(' ')}
+        className={[styles.image, styles.full].join(" ")}
         style={{ display: isLoaded ? "block" : "none" }}
         src={url}
       />

@@ -8,15 +8,13 @@
 }
 
 .full {
-  height: auto;
+  height: -webkit-fill-available;
   max-width: 100%;
-
   transition: opacity 400ms ease 500ms;
 }
 
 .thumb {
   width: auto;
   filter: blur(20px);
-  transform: scale(1.05);
   transition: visibility 100ms ease 300ms;
 }

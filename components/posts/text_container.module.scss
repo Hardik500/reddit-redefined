@@ -1,0 +1,10 @@
+.post_text {
+  width: 100%;
+  overflow-y: scroll;
+  height: 65vh;
+
+  a {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
