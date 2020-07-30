@@ -20,7 +20,7 @@ export default function ImageContainer({ url, image_props, thumbnail }) {
         }}
         className={[styles.image, styles.full].join(" ")}
         style={{ display: isLoaded ? "block" : "none" }}
-        src={url}
+        src={url.replace(/amp;/g,'')}
       />
     </div>
   );
