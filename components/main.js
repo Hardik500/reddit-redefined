@@ -123,6 +123,7 @@ class Main extends React.Component {
               <>
                 <div className={styles.div_title}>
                   <p>{title}</p>
+                  {thumbnail === "nsfw" ? (<div className={styles.nsfw}><span className={styles.nsfw_text}>nsfw</span></div>) : ""}
                 </div>
                 <div className={styles.flexContainer}>
                   <div className={styles.div_left_vote}>
@@ -133,7 +134,7 @@ class Main extends React.Component {
                       fill="#818384"
                       onClick={() => nextPost(1, id)}
                       xmlns="http://www.w3.org/2000/svg"
-                      className={styles.upvote}
+                      className={[styles.upvote, styles.hoverEffect].join(" ")}
                     >
                       <path
                         d="M18 0L33.5885 16.0169H2.41154L18 0Z"
@@ -157,7 +158,7 @@ class Main extends React.Component {
                       fill="#818384"
                       xmlns="http://www.w3.org/2000/svg"
                       onClick={() => nextPost(-1, id)}
-                      className={styles.downvote}
+                      className={[styles.downvote, styles.hoverEffect].join(" ")}
                     >
                       <path
                         d="M16 36L0.411546 19.983L31.5885 19.9831L16 36Z"
@@ -186,7 +187,7 @@ class Main extends React.Component {
                       viewBox="0 0 27 27"
                       fill="none"
                       onClick={() => nextPost(0, id)}
-                      className={styles.hide}
+                      className={styles.hoverEffect}
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <circle
@@ -209,7 +210,7 @@ class Main extends React.Component {
                       viewBox="0 0 30 29"
                       fill="none"
                       onClick={() => nextPost(0, id)}
-                      className={styles.hide}
+                      className={styles.hoverEffect}
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
@@ -231,8 +232,7 @@ class Main extends React.Component {
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 20 20"
-                        onClick={() => nextPost(0, id)}
-                        className={styles.hide}
+                        className={styles.hoverEffect}
                       >
                         <g>
                           <circle

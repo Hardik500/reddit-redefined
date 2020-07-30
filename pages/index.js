@@ -325,7 +325,6 @@ class Home extends React.Component {
               current_user_karma={link_karma + comment_karma}
               current_user_profile={icon_img}
             ></Navbar>
-            {console.log(permalink)}
             <Main
               title={title}
               type={post_hint}
