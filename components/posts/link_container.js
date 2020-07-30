@@ -2,10 +2,10 @@ import styles from "./link_container.module.scss";
 
 export default function LinkContainer({ url, thumbnail }) {
   return (
-    <div>
-      <a href={url}>{url}</a>
+    <div className={styles.container}>
+      <a className={styles.url} href={url} target="_blank">{url}</a>
       <br />
-      <img src={thumbnail} />
+      {thumbnail !== "default" && <a href={url} target="_blank"><img src={thumbnail}/></a>}
     </div>
   );
 }

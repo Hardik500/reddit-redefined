@@ -36,6 +36,9 @@
 .div_title {
   max-height: 25vh;
   height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
   p {
     text-align: justify;
@@ -104,6 +107,13 @@
   }
 }
 
+.hoverEffect {
+  &:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+}
+
 .upvote {
   &:hover {
     transform: scale(1.05);
@@ -124,9 +134,15 @@
   }
 }
 
-.hide{
+.hide {
   &:hover {
     transform: scale(1.05);
     cursor: pointer;
   }
+}
+
+.nsfw_text {
+  border: 1px solid rgb(255, 88, 91);
+  color: rgb(255, 88, 91);
+  margin: 0 0.5em;
 }

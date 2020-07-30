@@ -1,0 +1,19 @@
+.container {
+    width: 49vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .url {
+        font-size: 20px;
+        color: #4193c6;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+    }
+
+    img {
+        border: 1px solid white;
+        border-radius: 5px;
+    }
+}

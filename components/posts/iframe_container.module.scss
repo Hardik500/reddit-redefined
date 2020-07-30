@@ -1,4 +1,9 @@
 .container {
   display: flex;
   justify-content: center;
+  height: 100%;
+
+  iframe {
+    max-height: 65vh;
+  }
 }
