@@ -75,35 +75,14 @@ const getPopularSubereddits = async (token) =>
     .then((res) => res.data)
     .catch((err) => err);
 
-// const getRPopular = async (token, afterId = null, category = "hot") =>
-//   await axios
-//     .get(
-//       `${oauth}/r/popular/${category}?limit=10&g=GLOBAL&after=${afterId}&count=10`,
-//       {
-//         headers: {
-//           Authorization: `bearer ${token}`,
-//         },
-//       }
-//     )
-//     .then((res) => res.data)
-//     .catch((err) => err);
-
-const getXSubreddit = async (token, sub = "popular", afterId = null, category = "hot") =>
+const getXSubreddit = async (
+  token,
+  sub = "popular",
+  category = "hot",
+  afterId = null
+) =>
   await axios
-    .get(
-      `${oauth}/r/${sub}/${category}?limit=10&after=${afterId}&count=10`,
-      {
-        headers: {
-          Authorization: `bearer ${token}`,
-        },
-      }
-    )
-    .then((res) => res.data)
-    .catch((err) => err);
-
-const getBest = async (token, limit = 10, afterId = null, count = 0) =>
-  await axios
-    .get(`${oauth}/best?limit=${limit}`, {
+    .get(sub === "Home" ? `${oauth}/${category}?limit=10&after=${afterId}&count=10` : `${oauth}/r/${sub}/${category}?limit=10&after=${afterId}&count=10`, {
       headers: {
         Authorization: `bearer ${token}`,
       },
@@ -155,7 +134,6 @@ module.exports = {
   generateTempCode,
   getAboutOfSubreddit,
   getUserInformation,
-  getBest,
   getPopularSubereddits,
   getUserSubreddits,
   getUserData,

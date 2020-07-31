@@ -195,12 +195,12 @@ class Main extends React.Component {
                         cy="13.5"
                         r="12"
                         stroke="white"
-                        stroke-width="2"
+                        strokeWidth="2"
                       />
                       <path
                         d="M22.5 5.5L5 22"
                         stroke="white"
-                        stroke-width="2"
+                        strokeWidth="2"
                       />
                     </svg>
 
@@ -216,16 +216,16 @@ class Main extends React.Component {
                       <path
                         d="M28.5 1.5H6C4.07297 1.67722 2.98694 1.90844 1 3.5C4.09652 2.95997 5.05029 3.42714 6 5V28H28.5V1.5Z"
                         stroke="white"
-                        stroke-width="2"
+                        strokeWidth="2"
                       />
-                      <path d="M17.5 6.5V23" stroke="white" stroke-width="2" />
+                      <path d="M17.5 6.5V23" stroke="white" strokeWidth="2" />
                       <line
                         x1="9"
                         y1="14"
                         x2="25"
                         y2="14"
                         stroke="white"
-                        stroke-width="2"
+                        strokeWidth="2"
                       />
                     </svg>
                     <a href={`https://reddit.com${permalink}`} target="_blank">
@@ -250,7 +250,6 @@ class Main extends React.Component {
                     </a>
                   </div>
                 </div>
-                <div className={styles.div_comments}>Comments</div>
               </>
             ) : (
               <>
@@ -259,9 +258,6 @@ class Main extends React.Component {
                 />
                 <div
                   className={[styles.div_post_load, styles.load].join(" ")}
-                />
-                <div
-                  className={[styles.div_title_load, styles.load].join(" ")}
                 />
               </>
             )}
