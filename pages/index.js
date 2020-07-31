@@ -33,7 +33,7 @@ class Home extends React.Component {
     super(props);
     this.state = {
       selected: "Home",
-      category: "hot",
+      category: "best",
       access_token: null,
       refresh_token: null,
       isLoggedIn: false,
@@ -95,14 +95,14 @@ class Home extends React.Component {
     this.setState({
       subreddit: JSON.parse(getLocal("subredditData")) ?? {},
       selected: JSON.parse(getLocal("subreddit_selected")) ?? "Home",
-      category: JSON.parse(getLocal("category_selected")) ?? "hot",
+      category: JSON.parse(getLocal("category_selected")) ?? "best",
     });
     
     /* Initial load the data from the subreddit */
     await getXSubreddit(
       this.state.access_token ?? getCookie("access_token"),
-      this.state.selected,
-      JSON.parse(getLocal("category_selected")) ?? "hot"
+      JSON.parse(getLocal("subreddit_selected")) ?? "Home",
+      JSON.parse(getLocal("category_selected")) ?? "best"
     )
       .then(({ data }) => {
         let filtered = filterPosts(data.children);

@@ -82,11 +82,16 @@ const getXSubreddit = async (
   afterId = null
 ) =>
   await axios
-    .get(sub === "Home" ? `${oauth}/${category}?limit=10&after=${afterId}&count=10` : `${oauth}/r/${sub}/${category}?limit=10&after=${afterId}&count=10`, {
-      headers: {
-        Authorization: `bearer ${token}`,
-      },
-    })
+    .get(
+      sub === "Home"
+        ? `${oauth}/${category}?limit=10&after=${afterId}&count=10`
+        : `${oauth}/r/${sub}/${category}?limit=10&after=${afterId}&count=10`,
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      }
+    )
     .then((res) => res.data)
     .catch((err) => err);
 
@@ -130,6 +135,26 @@ const hidePost = async (token, id) =>
     .then((res) => res)
     .catch((err) => err);
 
+const savePost = async (token, id) =>
+  await axios
+    .post(`${oauth}/api/save?id=${id}`, null, {
+      headers: {
+        Authorization: `bearer ${token}`,
+      },
+    })
+    .then((res) => res)
+    .catch((err) => err);
+
+const unsavePost = async (token, id) =>
+  await axios
+    .post(`${oauth}/api/unsave?id=${id}`, null, {
+      headers: {
+        Authorization: `bearer ${token}`,
+      },
+    })
+    .then((res) => res)
+    .catch((err) => err);
+
 module.exports = {
   generateTempCode,
   getAboutOfSubreddit,
@@ -140,5 +165,7 @@ module.exports = {
   getXSubreddit,
   hidePost,
   refreshAccessToken,
+  savePost,
+  unsavePost,
   votePost,
 };
