@@ -2,10 +2,13 @@ import styles from "./navbar.module.scss";
 
 //Components
 import SubredditIcon from "./subreddit/subredditIcon";
+import Catgory from "./category";
 
 import { formatDistanceToNow } from "date-fns";
 
 export default function Navbar({
+  selected,
+  setSelectedSub,
   subreddit_title,
   subreddit_logo,
   post_user,
@@ -43,6 +46,9 @@ export default function Navbar({
       </div>
 
       <div className={styles.horz}>
+        <div>
+          <Catgory selected={selected} setSelectedSub={setSelectedSub}/>
+        </div>
         <div className={styles.profile_pic}>
           <img src={current_user_profile} />
         </div>

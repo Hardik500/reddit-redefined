@@ -32,7 +32,7 @@ const setLocal = (key, value) => {
   localStorage.setItem(key, value);
 };
 
-const getLocal = (key) => localStorage.getItem(key);
+const getLocal = (key) => localStorage.getItem(key) ?? undefined;
 
 const htmlDecode = (input) => {
   var e = document.createElement("div");

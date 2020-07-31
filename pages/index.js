@@ -5,7 +5,6 @@ import Router from "next/router";
 //API functions
 import {
   getUserData,
-  getBest,
   getXSubreddit,
   getAboutOfSubreddit,
   hidePost,
@@ -33,8 +32,8 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: "funny",
-      category: "Best",
+      selected: "Home",
+      category: "hot",
       access_token: null,
       refresh_token: null,
       isLoggedIn: false,
@@ -91,16 +90,19 @@ class Home extends React.Component {
     }
   }
 
-  loadInitialDate = () => {
+  loadInitialDate = async () => {
     /* Get the subreddit data from the local storage */
     this.setState({
       subreddit: JSON.parse(getLocal("subredditData")) ?? {},
+      selected: JSON.parse(getLocal("subreddit_selected")) ?? "Home",
+      category: JSON.parse(getLocal("category_selected")) ?? "hot",
     });
-
+    
     /* Initial load the data from the subreddit */
-    getXSubreddit(
+    await getXSubreddit(
       this.state.access_token ?? getCookie("access_token"),
-      this.state.selected
+      this.state.selected,
+      JSON.parse(getLocal("category_selected")) ?? "hot"
     )
       .then(({ data }) => {
         let filtered = filterPosts(data.children);
@@ -119,11 +121,12 @@ class Home extends React.Component {
         }
       })
       .catch((err) => {
+        console.log("Error", err);
         Router.push("/login");
       });
 
     /* Get the current user information */
-    getUserData(this.state.access_token ?? getCookie("access_token"))
+    await getUserData(this.state.access_token ?? getCookie("access_token"))
       .then((data) => {
         this.setState({
           user_data: data,
@@ -166,11 +169,13 @@ class Home extends React.Component {
 
   getNewData = async (
     selected = this.state.selected,
+    category = this.state.category,
     after = this.state.after
   ) => {
     getXSubreddit(
       this.state.access_token ?? getCookie("access_token"),
       selected,
+      category,
       after
     ).then(({ data }) => {
       if (data?.children.length) {
@@ -227,16 +232,23 @@ class Home extends React.Component {
     }
   };
 
-  setSelectedSub = async (subName) => {
+  setSelectedSub = async (
+    subName = this.state.selected,
+    category = this.state.category
+  ) => {
+    setLocal("subreddit_selected", JSON.stringify(subName));
+
     this.setState({
       selected: subName,
+      category: category,
       post_data: [],
       after: [],
     });
-    if(subName !== "Popular" || subName !== "All" || subName !== "Home"){
+    //Fetch new data of the subreddit if not global
+    if (subName != "Popular" && subName != "All" && subName != "Home") {
       await this.setSubRedditData(subName);
     }
-    await this.getNewData(subName, null);
+    await this.getNewData(subName, category, null);
   };
 
   render() {
@@ -269,14 +281,12 @@ class Home extends React.Component {
         ups,
       } = this.state.post_data[0]?.data ?? [];
 
-      console.log(this.state.post_data[0]?.data);
-
       const { reddit_video } = media ?? {};
 
       //Get the icon of the subreddit
       const sub_icon_img =
         this.state.subreddit[subreddit]?.icon_img ?? undefined;
-      
+
       //Ge the info of current user
       const { name, link_karma, comment_karma, icon_img } =
         this.state.user_data ?? [];
@@ -290,6 +300,8 @@ class Home extends React.Component {
               post_user={author}
               post_date={created_utc}
               current_username={name}
+              selected={this.state.selected}
+              setSelectedSub={this.setSelectedSub}
               current_user_karma={link_karma + comment_karma}
               current_user_profile={icon_img}
             ></Navbar>
@@ -320,7 +332,7 @@ class Home extends React.Component {
               subreddit_title={subreddit_name_prefixed}
               subreddit_logo={sub_icon_img}
               post_user={author}
-              post_date={created_utc ?? Date.now()/1000}
+              post_date={created_utc ?? Date.now() / 1000}
               current_username={name}
               current_user_karma={link_karma + comment_karma}
               current_user_profile={icon_img}
@@ -333,10 +345,8 @@ class Home extends React.Component {
               preview={preview}
               thumbnail={thumbnail}
               selected={this.state.selected}
-              setSelectedSub={this.setSelectedSub}
               media={reddit_video}
               iframe={secure_media_embed?.content}
-              nextPost={this.getNextPost}
               userSubs={JSON.parse(getLocal("personalSubs")) ?? []}
               favSubs={JSON.parse(getLocal("favoriteSubs")) ?? []}
             ></Main>
