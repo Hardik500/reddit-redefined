@@ -1,15 +1,16 @@
 import styles from "./video_container.module.scss";
 
-export default function VideoContainer({ media }) {
+import ReactPlayer from "react-player";
 
+export default function VideoContainer({ media }) {
   return (
     <div className={styles.container}>
-      <video
-        className={styles.video}
-        src={media.fallback_url}
-        autoPlay
-        controls
-      ></video>
+      <ReactPlayer
+        controls={true}
+        playing={true}
+        style={{"height": "100%", "maxHeight": "65vh"}}
+        url={media.hls_url}
+      ></ReactPlayer>
     </div>
   );
 }
