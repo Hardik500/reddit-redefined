@@ -3,13 +3,14 @@ import styles from "./video_container.module.scss";
 import ReactPlayer from "react-player";
 
 export default function VideoContainer({ media }) {
+  console.log(media)
   return (
     <div className={styles.container}>
       <ReactPlayer
         controls={true}
         playing={true}
         style={{"height": "100%", "maxHeight": "65vh"}}
-        url={media.hls_url}
+        url={"https://cors-anywhere.herokuapp.com/" + media.dash_url}
       ></ReactPlayer>
     </div>
   );
