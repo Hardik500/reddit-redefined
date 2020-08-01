@@ -3,7 +3,6 @@ import styles from "./video_container.module.scss";
 import ReactPlayer from "react-player";
 
 export default function VideoContainer({ media }) {
-  console.log(media)
   return (
     <div className={styles.container}>
       <ReactPlayer
