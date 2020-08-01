@@ -1,5 +1,7 @@
 import React, {useState} from "react";
 
+import {sanitizeURL} from "../../utils/helper";
+
 import styles from "./image_container.module.scss";
 
 export default function ImageContainer({ url, image_props, thumbnail }) {
@@ -20,7 +22,7 @@ export default function ImageContainer({ url, image_props, thumbnail }) {
         }}
         className={[styles.image, styles.full].join(" ")}
         style={{ display: isLoaded ? "block" : "none" }}
-        src={url.replace(/amp;/g,'')}
+        src={sanitizeURL(url)}
       />
     </div>
   );

@@ -42,7 +42,7 @@ class Communities extends React.Component {
               return (
                 <div className={[styles.horz, styles.selection, selected == data.display_name ? styles.selected : ""].join(" ")} key={data.name} onClick={(e) => setSelectedSub(data.display_name)}>
                   <div className={styles.subreddit_icon}>
-                    <SubredditIcon icon_img={data.icon_img} />
+                    <SubredditIcon community_icon={data.community_icon} icon_img={data.icon_img} primary_color={data.primary_color}/>
                   </div>
                   <div className={styles.subbredit_name}>
                     {data.display_name_prefixed}

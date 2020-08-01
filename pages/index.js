@@ -121,7 +121,7 @@ class Home extends React.Component {
         }
       })
       .catch((err) => {
-        console.log("Error", err);
+        console.log(err);
         Router.push("/login");
       });
 
@@ -284,8 +284,11 @@ class Home extends React.Component {
       const { reddit_video } = media ?? {};
 
       //Get the icon of the subreddit
-      const sub_icon_img =
-        this.state.subreddit[subreddit]?.icon_img ?? undefined;
+      const community_icon =
+        this.state.subreddit[subreddit]?.community_icon ?? undefined;
+      const sub_icon_img = this.state.subreddit[subreddit]?.icon_img ?? undefined;
+
+      const primary_color = this.state.subreddit[subreddit]?.primary_color ?? undefined;
 
       //Ge the info of current user
       const { name, link_karma, comment_karma, icon_img } =
@@ -297,6 +300,8 @@ class Home extends React.Component {
             <Navbar
               subreddit_title={subreddit_name_prefixed}
               subreddit_logo={sub_icon_img}
+              community_icon={community_icon}
+              primary_color={primary_color}
               post_user={author}
               post_date={created_utc}
               current_username={name}
@@ -331,6 +336,7 @@ class Home extends React.Component {
             <Navbar
               subreddit_title={subreddit_name_prefixed}
               subreddit_logo={sub_icon_img}
+              community_icon={community_icon}
               post_user={author}
               post_date={created_utc ?? Date.now() / 1000}
               current_username={name}

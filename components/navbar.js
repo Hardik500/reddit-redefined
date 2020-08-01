@@ -11,11 +11,13 @@ export default function Navbar({
   setSelectedSub,
   subreddit_title,
   subreddit_logo,
+  primary_color,
   post_user,
   post_date,
   current_username,
   current_user_karma,
   current_user_profile,
+  community_icon,
 }) {
   return (
     <div className={styles.nav}>
@@ -30,7 +32,7 @@ export default function Navbar({
 
       <div className={styles.horz}>
         <div className={styles.subreddit_icon}>
-          <SubredditIcon icon_img={subreddit_logo} />
+          <SubredditIcon community_icon={community_icon} primary_color={primary_color} icon_img={subreddit_logo} />
         </div>
         <div className={styles.post_subreddit}>
           {subreddit_title} &nbsp;&nbsp;
