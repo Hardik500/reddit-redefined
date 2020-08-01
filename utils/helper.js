@@ -71,6 +71,8 @@ const filterPosts = (post_data) => post_data.filter((e) => e.data.likes == null)
 
 const favoriteSub = (post_data) => post_data.filter((e) => e.data.user_has_favorited)
 
+const sanitizeURL = (url) => url.replace(/amp;/g,'');
+
 module.exports = {
   favoriteSub,
   filterPosts,
@@ -81,6 +83,7 @@ module.exports = {
   isEmptyObject,
   nFormatter,
   reducePost,
+  sanitizeURL,
   setCookie,
   setLocal,
 };
