@@ -1,8 +1,8 @@
 import styles from "./main.module.scss";
 
-import Communities from "./communities";
-import Sidebar from "./sidebar";
-import Feed from "./feed";
+import Communities from "./side/communities";
+import Sidebar from "./side/sidebar";
+import Feed from "./side/feed";
 import Switcher from "./posts/switcher";
 
 //API functions

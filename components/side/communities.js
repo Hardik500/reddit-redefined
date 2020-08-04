@@ -1,7 +1,7 @@
 import styles from "./communities.module.scss";
 
 //Components
-import SubredditIcon from "./subreddit/subredditIcon";
+import SubredditIcon from "../subreddit/subredditIcon";
 
 class Communities extends React.Component {
   constructor(props) {

@@ -1,6 +1,6 @@
 import styles from "./category.module.scss";
 
-import { getLocal, setLocal } from "../utils/helper";
+import { getLocal, setLocal } from "../../utils/helper";
 
 const Best = () => {
   return (
@@ -111,8 +111,8 @@ class Catgory extends React.Component {
 
   render() {
     return (
-      <div className={styles.container} onClick={() => this.toggleShown()}>
-        <div className={[styles.emoji_content, styles.main].join(" ")}>
+      <div className={styles.container}>
+        <div className={[styles.emoji_content, styles.main].join(" ")} onClick={() => this.toggleShown()}>
           {this.state.list[this.state.active]}
         </div>
         <div
@@ -123,7 +123,7 @@ class Catgory extends React.Component {
         >
           {this.state.list.map((e, i) => {
             return i != this.state.active ? (
-              <div className={styles.content} key={i}>
+              <div className={styles.content} key={i} onClick={() => this.toggleShown()}>
                 <div
                   className={styles.emoji_content}
                   onClick={() => this.setStateFunction(i)}

@@ -13,8 +13,9 @@ import {
 } from "../utils/api";
 
 //Components
-import Navbar from "../components/navbar";
+import Navbar from "../components/nav/navbar";
 import Main from "../components/main";
+import Loader from "../components/loader";
 
 //Helper functions
 import {
@@ -36,6 +37,7 @@ class Home extends React.Component {
       category: "best",
       access_token: null,
       refresh_token: null,
+      isLoaded: false,
       isLoggedIn: false,
       post_data: [],
       noPostLeft: false,
@@ -87,7 +89,13 @@ class Home extends React.Component {
 
       /* Start the counter for the next time comparison */
       setInterval(this.updateToken, 1000 * 60 * 25);
+    } else {
+      Router.push("/login");
     }
+
+    this.setState({
+      isLoaded: true,
+    });
   }
 
   loadInitialDate = async () => {
@@ -97,7 +105,7 @@ class Home extends React.Component {
       selected: JSON.parse(getLocal("subreddit_selected")) ?? "Home",
       category: JSON.parse(getLocal("category_selected")) ?? "best",
     });
-    
+
     /* Initial load the data from the subreddit */
     await getXSubreddit(
       this.state.access_token ?? getCookie("access_token"),
@@ -252,17 +260,11 @@ class Home extends React.Component {
   };
 
   render() {
-    /* No query is passed in the url and the user is not logged in */
-    if (isEmptyObject(this.props.query) && !this.state.isLoggedIn) {
-      return (
-        <Link href="/login">
-          <a>Please Login</a>
-        </Link>
-      );
-    }
-
-    /* The user is logged in */
-    if (this.state.isLoggedIn) {
+    /* If nothing is loaded */
+    if (!this.state.isLoaded) {
+      return <Loader />;
+    } else if (this.state.isLoggedIn) {
+      /* The user is logged in */
       const {
         author,
         created_utc,
@@ -286,9 +288,11 @@ class Home extends React.Component {
       //Get the icon of the subreddit
       const community_icon =
         this.state.subreddit[subreddit]?.community_icon ?? undefined;
-      const sub_icon_img = this.state.subreddit[subreddit]?.icon_img ?? undefined;
+      const sub_icon_img =
+        this.state.subreddit[subreddit]?.icon_img ?? undefined;
 
-      const primary_color = this.state.subreddit[subreddit]?.primary_color ?? undefined;
+      const primary_color =
+        this.state.subreddit[subreddit]?.primary_color ?? undefined;
 
       //Ge the info of current user
       const { name, link_karma, comment_karma, icon_img } =
@@ -364,7 +368,7 @@ class Home extends React.Component {
       return <div>No posts left</div>;
     } else {
       /* If nothing is there show the loader */
-      return <div>Loading...</div>;
+      return <Loader />;
     }
   }
 }

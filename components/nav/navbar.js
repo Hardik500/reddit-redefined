@@ -1,7 +1,7 @@
 import styles from "./navbar.module.scss";
 
 //Components
-import SubredditIcon from "./subreddit/subredditIcon";
+import SubredditIcon from "../subreddit/subredditIcon";
 import Catgory from "./category";
 
 import { formatDistanceToNow } from "date-fns";

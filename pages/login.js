@@ -6,7 +6,7 @@ const code = process.env.secret_code;
 
 const link =
   process.env.reddit_api +
-  `/authorize?client_id=${process.env.client_id}&response_type=code&state=${code}&redirect_uri=${process.env.redirect_url}&duration=permanent&scope=identity read mysubreddits vote submit privatemessages report save`;
+  `/authorize?client_id=${process.env.client_id}&response_type=code&state=${code}&redirect_uri=${process.env.redirect_url}&duration=permanent&scope=identity read mysubreddits vote submit privatemessages report save history`;
 
 export default function Login() {
   return (
