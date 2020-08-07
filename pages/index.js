@@ -129,8 +129,8 @@ class Home extends React.Component {
         }
       })
       .catch((err) => {
-        console.log(err);
-        Router.push("/login");
+        this.updateToken();
+        this.loadInitialDate();
       });
 
     /* Get the current user information */
@@ -141,7 +141,8 @@ class Home extends React.Component {
         });
       })
       .catch((err) => {
-        Router.push("/login");
+        this.updateToken();
+        this.loadInitialDate();
       });
   };
 

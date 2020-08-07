@@ -1,13 +1,7 @@
 .container {
   display: flex;
   align-items: center;
-  flex-direction: column;
-
-  &:hover {
-    > .menu {
-      display: flex;
-    }
-  }
+  flex-direction: row;
 }
 
 .icon {
@@ -36,9 +30,9 @@
   transition: all 0.5s;
   display: none;
   opacity: 0;
-  position: absolute;
+  position: relative;
   right: 11px;
-  top: 3px;
+  top: -1px;
   padding: 5px 15px;
   background-color: black;
   border: 1px solid #ffffff;
@@ -58,7 +52,7 @@
 
   &:after,
   &:before {
-    right: 100%;
+    left: 100%;
     top: 50%;
     border: solid transparent;
     content: " ";
@@ -70,13 +64,13 @@
 
   &:after {
     border-color: rgba(0, 0, 0, 0);
-    border-right-color: #000000;
+    border-left-color: #000000;
     border-width: 8px;
     margin-top: -8px;
   }
   &:before {
     border-color: rgba(255, 255, 255, 0);
-    border-right-color: #ffffff;
+    border-left-color: #ffffff;
     border-width: 11px;
     margin-top: -11px;
   }

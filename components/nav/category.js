@@ -81,10 +81,11 @@ class Catgory extends React.Component {
   }
 
   componentDidMount() {
-    const index = ["best", "hot", "top", "new"].indexOf(JSON.parse(getLocal("category_selected")));
+    const index = ["best", "hot", "top", "new"].indexOf(
+      JSON.parse(getLocal("category_selected"))
+    );
     this.setState({
-      active:
-      index > -1 ? index : 0,
+      active: index > -1 ? index : 0,
     });
   }
 
@@ -112,9 +113,6 @@ class Catgory extends React.Component {
   render() {
     return (
       <div className={styles.container}>
-        <div className={[styles.emoji_content, styles.main].join(" ")} onClick={() => this.toggleShown()}>
-          {this.state.list[this.state.active]}
-        </div>
         <div
           className={[
             styles.menu,
@@ -123,7 +121,11 @@ class Catgory extends React.Component {
         >
           {this.state.list.map((e, i) => {
             return i != this.state.active ? (
-              <div className={styles.content} key={i} onClick={() => this.toggleShown()}>
+              <div
+                className={styles.content}
+                key={i}
+                onClick={() => this.toggleShown()}
+              >
                 <div
                   className={styles.emoji_content}
                   onClick={() => this.setStateFunction(i)}
@@ -133,6 +135,12 @@ class Catgory extends React.Component {
               </div>
             ) : null;
           })}
+        </div>
+        <div
+          className={[styles.emoji_content, styles.main].join(" ")}
+          onClick={() => this.toggleShown()}
+        >
+          {this.state.list[this.state.active]}
         </div>
       </div>
     );
