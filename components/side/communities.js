@@ -16,7 +16,7 @@ class Communities extends React.Component {
     let tempArr = [];
     for (let index = 0; index < 15; index++) {
       tempArr.push(
-        <div className={styles.horz}>
+        <div className={styles.horz} key={index}>
           <div
             className={[styles.subreddit_icon_load, styles.load].join(" ")}
           />

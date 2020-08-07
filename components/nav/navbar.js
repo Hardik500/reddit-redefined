@@ -58,9 +58,9 @@ export default function Navbar({
           <div className={styles.user_name}>{current_username}</div>
           <div className={styles.user_karma}>{current_user_karma} Karma</div>
         </div>
-        <div className={styles.settings}>
+        {/* <div className={styles.settings}>
           <img src="/images/settings.png" />
-        </div>
+        </div> */}
       </div>
     </div>
   );
