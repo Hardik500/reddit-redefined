@@ -1,5 +1,7 @@
-import Link from "next/link";
 import Layout from "../components/layout";
+
+import Navbar from "../components/login/navbar";
+import Main from "../components/login/main";
 
 //Secret code that will be passed in the URL parameter
 const code = process.env.secret_code;
@@ -11,13 +13,8 @@ const link =
 export default function Login() {
   return (
     <Layout login>
-      <section>
-        <button>
-          <Link href={link} prefetch={false}>
-            <a>Sign In With Reddit</a>
-          </Link>
-        </button>
-      </section>
+      <Navbar link={link} />
+      <Main link={link}/>
     </Layout>
   );
 }

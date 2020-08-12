@@ -1,0 +1,70 @@
+$white-color: #fff;
+
+.container {
+  height: 87vh;
+  overflow-y: scroll;
+}
+
+.inner_container {
+  margin: 10px 40px;
+}
+
+.pointBoxTitle {
+  font-weight: 700;
+}
+
+.div_center {
+  text-align: center;
+}
+
+.iframe_container {
+  padding-bottom: 49.5%;
+  padding-top: 0;
+  height: 0;
+  text-align: center;
+}
+
+.iframe_main {
+  width: 90%;
+  height: 88.6vh;
+  border-width: 0px;
+  max-width: 100%;
+  border: 2px solid $white-color;
+  border-radius: 10px;
+}
+
+.feature_container {
+  border: 1px solid $white-color;
+  display: flex;
+  margin: 20px auto;
+  padding: 20px auto;
+  justify-content: space-around;
+}
+
+.sign_in_cont {
+  button {
+    width: 300px;
+    cursor: pointer;
+    background: #dedede;
+    padding: 5px 20px;
+    border-radius: 10px;
+    transition: 0.5s all;
+
+    &:hover {
+      background: $white-color;
+    }
+  }
+
+  .sign_in {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 22px;
+    font-family: "Palanquin Dark", sans-serif;
+    font-weight: 700;
+  }
+
+  img {
+    width: 40px;
+  }
+}

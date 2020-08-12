@@ -185,6 +185,12 @@ class Main extends React.Component {
     }
   };
 
+  UNSAFE_componentWillReceiveProps(){
+    this.setState({
+      saved: false
+    })
+  }
+
   componentDidUpdate() {
     setLocal("personalSubs", JSON.stringify(this.state.user_subreddit));
     setLocal("favoriteSubs", JSON.stringify(this.state.user_fav));
