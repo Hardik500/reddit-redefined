@@ -13,6 +13,42 @@ $white-color: #fff;
   font-weight: 700;
 }
 
+.second {
+  background: linear-gradient(180deg, #1b11117a, #ff9150);
+  margin-top: -130px;
+  height: 340px;
+}
+
+.secondary {
+  background: #ff9150;
+  margin-top: -24px;
+  color: #1b1111;
+  font-family: "Palanquin Dark", sans-serif;
+}
+
+.third {
+  background: linear-gradient(180deg, #ff9150, #f93212);
+  height: 200px;
+}
+
+.tertiary {
+  background: #f93212;
+  margin-top: -25px;
+  color: wheat;
+}
+
+.forth {
+  background: linear-gradient(180deg, #f93212, #ff9150);
+  height: 200px;
+}
+
+.ohmygod {
+  img {
+    border: 3px solid #1b1111;
+    border-radius: 4px;
+  }
+}
+
 .div_center {
   text-align: center;
 }
@@ -26,7 +62,7 @@ $white-color: #fff;
 
 .iframe_main {
   width: 90%;
-  height: 88.6vh;
+  height: 90vh;
   border-width: 0px;
   max-width: 100%;
   border: 2px solid $white-color;

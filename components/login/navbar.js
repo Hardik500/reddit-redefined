@@ -15,14 +15,16 @@ export default function Navbar({ link }) {
 
       <div className={styles.horz}>
         <div className={styles.sign_in_cont}>
-          <button>
-            <Link href={link} prefetch={false}>
-              <div className={styles.sign_in}>
-                <img src="/images/actual-reddit.png" />
-                <a>Sign In With Reddit</a>
-              </div>
-            </Link>
-          </button>
+          <Link href={link} prefetch={false}>
+            <a>
+              <button>
+                <div className={styles.sign_in}>
+                  <img src="/images/actual-reddit.png" />
+                  Sign In With Reddit
+                </div>
+              </button>
+            </a>
+          </Link>
         </div>
       </div>
     </div>
