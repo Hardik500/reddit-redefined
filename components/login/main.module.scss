@@ -14,7 +14,7 @@ $white-color: #fff;
 }
 
 .second {
-  background: linear-gradient(180deg, #1b11117a, #ff9150);
+  background: linear-gradient(180deg, #1b1111, #ff9150);
   margin-top: -130px;
   height: 340px;
 }
@@ -40,6 +40,12 @@ $white-color: #fff;
 .forth {
   background: linear-gradient(180deg, #f93212, #ff9150);
   height: 200px;
+}
+
+.fifth {
+  background: linear-gradient(180deg, #ff9150, #1b1111 75%);
+  margin-top: -130px;
+  height: 340px;
 }
 
 .ohmygod {
@@ -70,11 +76,28 @@ $white-color: #fff;
 }
 
 .feature_container {
-  border: 1px solid $white-color;
   display: flex;
   margin: 20px auto;
-  padding: 20px auto;
+  padding: 20px 0;
   justify-content: space-around;
+  flex: 1;
+
+  .feature_section_1 {
+    flex: 0.4;
+
+    p {
+      text-align: justify;
+    }
+  }
+
+  .feature_section_2 {
+    flex: 0.4;
+
+    img {
+      border: 4px solid $white-color;
+      border-radius: 10px;
+    }
+  }
 }
 
 .sign_in_cont {
@@ -102,5 +125,19 @@ $white-color: #fff;
 
   img {
     width: 40px;
+  }
+}
+
+
+.footer {
+  margin-top: 50px;
+  border-top: 2px solid $white-color;
+
+  > div {
+    margin-top: 20px;
+  }
+
+  a {
+    color: $white-color;
   }
 }
