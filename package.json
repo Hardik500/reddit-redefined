@@ -1,7 +1,7 @@
 {
   "name": "reddit-redefined",
   "version": "1.0.0",
-  "description": "",
+  "description": "reddit: But with a bit of twist of UI supports only voting of posts",
   "main": "index.js",
   "private": true,
   "scripts": {
