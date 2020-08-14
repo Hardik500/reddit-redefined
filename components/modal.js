@@ -29,7 +29,7 @@ export default function Modal({ show, changeDisplay }) {
               <img src="/images/cookie.png" />
               Posts not displaying?
             </button>
-            <p> - Clear the respective cookies from your browser</p>
+            <p> - Try refreshing, if that doesn't work then click it</p>
           </div>
           <hr />
           <div className={styles.option}>
