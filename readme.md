@@ -5,10 +5,10 @@ reddit: But with a bit of twist of UI supports only voting of posts
 
 ## Table of Contents
 
-* [Description](https://github.com/Hardik500/reddit-redefined/new/master?readme=1#description)
-* [Features](https://github.com/Hardik500/reddit-redefined/new/master?readme=1#features)
-* [Technologies](https://github.com/Hardik500/reddit-redefined/new/master?readme=1#technologies)
-* [Run Locally](https://github.com/Hardik500/reddit-redefined/new/master?readme=1#run-the-project-locally)
+* [Description](https://github.com/Hardik500/reddit-redefined/#description)
+* [Features](https://github.com/Hardik500/reddit-redefined/#features)
+* [Technologies](https://github.com/Hardik500/reddit-redefined/#technologies)
+* [Run Locally](https://github.com/Hardik500/reddit-redefined/#run-the-project-locally)
 
 ### Description
 
