@@ -9,7 +9,7 @@ export default function VideoContainer({ media }) {
         controls={true}
         playing={true}
         style={{"height": "100%", "maxHeight": "65vh"}}
-        url={"https://cors-anywhere.herokuapp.com/" + media.dash_url}
+        url={"https://nameless-taiga-82931.herokuapp.com/" + media.dash_url}
       ></ReactPlayer>
     </div>
   );
