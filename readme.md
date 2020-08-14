@@ -1,14 +1,13 @@
 # reddit-redefined
-reddit: But with a bit of twist of UI supports only voting of posts
 
 ![Image](https://res.cloudinary.com/hardik-khandelwal/image/upload/v1597433490/app_main.png)
 
 ## Table of Contents
 
-* [Description](https://github.com/Hardik500/reddit-redefined/#description)
-* [Features](https://github.com/Hardik500/reddit-redefined/#features)
-* [Technologies](https://github.com/Hardik500/reddit-redefined/#technologies)
-* [Run Locally](https://github.com/Hardik500/reddit-redefined/#run-the-project-locally)
+* [Description](https://github.com/Hardik500/reddit-redefined#description)
+* [Features](https://github.com/Hardik500/reddit-redefined#features)
+* [Technologies](https://github.com/Hardik500/reddit-redefined#technologies)
+* [Run Locally](https://github.com/Hardik500/reddit-redefined#run-the-project-locally)
 
 ### Description
 
