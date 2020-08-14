@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import styles from "./navbar.module.scss";
 
 //Components
@@ -5,6 +7,7 @@ import SubredditIcon from "../subreddit/subredditIcon";
 import Catgory from "./category";
 
 import { formatDistanceToNow } from "date-fns";
+import Modal from "../modal";
 
 export default function Navbar({
   selected,
@@ -19,6 +22,8 @@ export default function Navbar({
   current_user_profile,
   community_icon,
 }) {
+  const [show, changeDisplay] = useState(false);
+
   return (
     <div className={styles.nav}>
       <div className={styles.horz}>
@@ -32,7 +37,11 @@ export default function Navbar({
 
       <div className={styles.horz}>
         <div className={styles.subreddit_icon}>
-          <SubredditIcon community_icon={community_icon} primary_color={primary_color} icon_img={subreddit_logo} />
+          <SubredditIcon
+            community_icon={community_icon}
+            primary_color={primary_color}
+            icon_img={subreddit_logo}
+          />
         </div>
         <div className={styles.post_subreddit}>
           {subreddit_title} &nbsp;&nbsp;
@@ -49,7 +58,7 @@ export default function Navbar({
 
       <div className={styles.horz}>
         <div>
-          <Catgory selected={selected} setSelectedSub={setSelectedSub}/>
+          <Catgory selected={selected} setSelectedSub={setSelectedSub} />
         </div>
         <div className={styles.profile_pic}>
           <img src={current_user_profile} />
@@ -59,9 +68,10 @@ export default function Navbar({
           <div className={styles.user_karma}>{current_user_karma} Karma</div>
         </div>
         <div className={styles.settings}>
-          <img src="/images/settings.png" />
+          <img src="/images/settings.png" onClick={() => changeDisplay(true)}/>
         </div>
       </div>
+      {show && <Modal show={show} changeDisplay={changeDisplay} />}
     </div>
   );
 }

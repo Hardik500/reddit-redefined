@@ -6,10 +6,21 @@ const isEmptyObject = (query) => {
   return true;
 };
 
-const getLatest = (kind = "t3",posts) =>  kind + "_" + posts[posts.length - 1].data.id;
+const getLatest = (kind = "t3", posts) =>
+  kind + "_" + posts[posts.length - 1].data.id;
 
 const setCookie = (key, value) => {
   document.cookie = `${key}=${value}; path = /`;
+};
+
+const clearCookie = () => {
+  document.cookie =
+    "access_token" + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+  document.cookie =
+    "refresh_time" + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+  document.cookie =
+    "refresh_token" + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+  window.location = ""; // TO REFRESH THE PAGE
 };
 
 const getCookie = (key) => {
@@ -34,6 +45,14 @@ const getLocal = (key) => localStorage.getItem(key);
 
 const removeLocal = async (key) => localStorage.removeItem(key);
 
+const clearLocal = (reload = true) => {
+  localStorage.clear();
+
+  if(reload){
+    window.location = "";
+  }
+};
+
 const htmlDecode = (input) => {
   var e = document.createElement("div");
   e.innerHTML = input;
@@ -49,12 +68,12 @@ const reducePost = (post_data) => {
 const nFormatter = (num, digits) => {
   var si = [
     { value: 1, symbol: "" },
-    { value: 1E3, symbol: "k" },
-    { value: 1E6, symbol: "M" },
-    { value: 1E9, symbol: "G" },
-    { value: 1E12, symbol: "T" },
-    { value: 1E15, symbol: "P" },
-    { value: 1E18, symbol: "E" }
+    { value: 1e3, symbol: "k" },
+    { value: 1e6, symbol: "M" },
+    { value: 1e9, symbol: "G" },
+    { value: 1e12, symbol: "T" },
+    { value: 1e15, symbol: "P" },
+    { value: 1e18, symbol: "E" },
   ];
   var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
   var i;
@@ -64,16 +83,19 @@ const nFormatter = (num, digits) => {
     }
   }
   return (num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
-}
+};
 
+const filterPosts = (post_data) =>
+  post_data.filter((e) => e.data.likes == null);
 
-const filterPosts = (post_data) => post_data.filter((e) => e.data.likes == null)
+const favoriteSub = (post_data) =>
+  post_data.filter((e) => e.data.user_has_favorited);
 
-const favoriteSub = (post_data) => post_data.filter((e) => e.data.user_has_favorited)
-
-const sanitizeURL = (url) => url.replace(/amp;/g,'');
+const sanitizeURL = (url) => url.replace(/amp;/g, "");
 
 module.exports = {
+  clearCookie,
+  clearLocal,
   favoriteSub,
   filterPosts,
   getCookie,
