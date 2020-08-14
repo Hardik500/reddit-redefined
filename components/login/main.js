@@ -180,16 +180,16 @@ export default function Main({ link }) {
           </div>
           <div>
             <div className={styles.sign_in_cont}>
-              <Link href={link} prefetch={false}>
-                <a>
-                  <button>
-                    <div className={styles.sign_in}>
-                      <img src="/images/actual-reddit.png" />
-                      Sign In With Reddit
-                    </div>
-                  </button>
-                </a>
-              </Link>
+              <button
+                onClick={() => {
+                  window.location = link;
+                }}
+              >
+                <div className={styles.sign_in}>
+                  <img src="/images/actual-reddit.png" />
+                  Sign In With Reddit
+                </div>
+              </button>
             </div>
           </div>
           <br />
@@ -229,7 +229,10 @@ export default function Main({ link }) {
           <span role="img" aria-label="love">
             ❤️
           </span>{" "}
-          by <a href="https://www.github.com/hardik500" target="_blank">Hardik Khandelwal</a>
+          by{" "}
+          <a href="https://www.github.com/hardik500" target="_blank">
+            Hardik Khandelwal
+          </a>
         </div>
       </div>
     </div>
