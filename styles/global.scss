@@ -2,8 +2,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Palanquin+Dark&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Ropa+Sans&display=swap");
 
-$primary-color: #1b1111;
-$white-color: #fff;
+@import 'colors';
+
 $font-stack: "Righteous", cursive;
 
 html,
@@ -11,8 +11,8 @@ body {
   padding: 0;
   margin: 0;
   font-size: 18px;
-  background-color: $primary-color;
-  color: $white-color;
+  background-color: $background-color;
+  color: $font-color;
   font-family: $font-stack;
   overflow-y: hidden;
 }
@@ -27,7 +27,7 @@ body {
   height: 8px;
 }
 *::-webkit-scrollbar-track {
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba($posts-color, 0.4);
   border-radius: 10px;
 }
 *::-webkit-scrollbar-thumb {

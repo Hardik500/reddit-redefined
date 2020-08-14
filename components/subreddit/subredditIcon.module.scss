@@ -1,13 +1,13 @@
-$white-color: #fff;
+@import '../../styles/colors';
 
 .default_subreddit {
     height: 35px;
     width: 35px;
     border-radius: 50%;
-    border: 2px solid $white-color;
+    border: 2px solid $font-color;
     display: inline-block;
     vertical-align: middle;
-    background: #0079d3;
+    background: $sub-bg-color;
     box-sizing: border-box;
-    fill: $white-color;
+    fill: $font-color;
   }
