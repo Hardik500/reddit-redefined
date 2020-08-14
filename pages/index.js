@@ -1,5 +1,4 @@
 //Library functions
-import Link from "next/link";
 import Router from "next/router";
 
 //API functions
@@ -27,6 +26,7 @@ import {
   setCookie,
   setLocal,
   reducePost,
+  removeLocal,
 } from "../utils/helper";
 
 class Home extends React.Component {
@@ -75,6 +75,11 @@ class Home extends React.Component {
     /* Access token is present in the cookies */
 
     if (getCookie("refresh_token") ?? undefined) {
+      
+      /* Remove the subs data if it's been more than a day */
+      this.removeSubs();
+
+      /* Change the status of sign in */
       this.setState({
         access_token: getCookie("access_token"),
         refresh_token: getCookie("refresh_token"),
@@ -128,7 +133,7 @@ class Home extends React.Component {
           this.setSubRedditData(filtered[0].data.subreddit);
         }
       })
-      .catch((err) => {
+      .catch(() => {
         this.updateToken();
         this.loadInitialDate();
       });
@@ -140,10 +145,17 @@ class Home extends React.Component {
           user_data: data,
         });
       })
-      .catch((err) => {
+      .catch(() => {
         this.updateToken();
         this.loadInitialDate();
       });
+  };
+
+  removeSubs = () => {
+    if (getLocal("subRefreshTime") <= Date.now()) {
+      removeLocal("favoriteSubs");
+      removeLocal("personalSubs");
+    }
   };
 
   updateToken = async () => {

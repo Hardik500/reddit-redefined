@@ -31,26 +31,49 @@ class Communities extends React.Component {
   }
 
   render() {
-    const { user_subreddit, title, selected, setSelectedSub } = this.props;
+    const {
+      user_subreddit,
+      title,
+      selected,
+      setSelectedSub,
+      fetched,
+    } = this.props;
+
     return (
       <>
         <div className={styles.heading}>{title}</div>
         <div className={styles.border_white} />
         <div className={styles.container}>
-          {(user_subreddit.length &&
-            user_subreddit?.map(({ data }) => {
-              return (
-                <div className={[styles.horz, styles.selection, selected == data.display_name ? styles.selected : ""].join(" ")} key={data.name} onClick={(e) => setSelectedSub(data.display_name)}>
-                  <div className={styles.subreddit_icon}>
-                    <SubredditIcon community_icon={data.community_icon} icon_img={data.icon_img} primary_color={data.primary_color}/>
+          {user_subreddit.length
+            ? user_subreddit?.map(({ data }) => {
+                return (
+                  <div
+                    className={[
+                      styles.horz,
+                      styles.selection,
+                      selected == data.display_name ? styles.selected : "",
+                    ].join(" ")}
+                    key={data.name}
+                    onClick={(e) => setSelectedSub(data.display_name)}
+                  >
+                    <div className={styles.subreddit_icon}>
+                      <SubredditIcon
+                        community_icon={data.community_icon}
+                        icon_img={data.icon_img}
+                        primary_color={data.primary_color}
+                      />
+                    </div>
+                    <div className={styles.subbredit_name}>
+                      {data.display_name_prefixed}
+                    </div>
                   </div>
-                  <div className={styles.subbredit_name}>
-                    {data.display_name_prefixed}
-                  </div>
+                );
+              })
+            : fetched ? (
+                <div>
+                  <p>No Subs here</p>
                 </div>
-              );
-            })) ||
-            this.state.dummy_data}
+              ) : this.state.dummy_data}
         </div>
       </>
     );

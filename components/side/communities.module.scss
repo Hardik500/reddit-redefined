@@ -10,6 +10,7 @@ $white-color: #fff;
 .container {
   overflow-y: scroll;
   height: 85%;
+  width: 200px;
 }
 
 .border_white {
@@ -42,7 +43,7 @@ $white-color: #fff;
 .subreddit_icon_load {
   height: 30px;
   width: 35px;
-  margin: 5px 10px;
+  margin: 4px 10px;
   border-radius: 50%;
   background-color: gray;
   position: relative;
@@ -51,7 +52,8 @@ $white-color: #fff;
 
 .subbredit_name_load {
   height: 30px;
-  width: 100%;
+  width: 165px;
+  margin-right: 10px;
   border-radius: 4px;
   background-color: gray;
   position: relative;

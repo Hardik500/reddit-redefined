@@ -120,6 +120,7 @@ class Main extends React.Component {
       after: null,
       fetched: false,
       saved: false,
+      finalLoad: false
     };
   }
 
@@ -127,6 +128,8 @@ class Main extends React.Component {
     if (!this.props.userSubs.length) {
       this.fetchUserSubreddits();
     }
+
+    setLocal("subRefreshTime", Date.now() + 24 * 60 * 60 * 1000);
   }
 
   fetchUserSubreddits = (after = null) => {
@@ -168,6 +171,10 @@ class Main extends React.Component {
       .then(() => {
         if (!this.state.fetched) {
           this.fetchUserSubreddits(this.state.after);
+        } else {
+          this.setState({
+            finalLoad: true
+          })
         }
       })
       .catch((err) => console.log(err));
@@ -225,6 +232,7 @@ class Main extends React.Component {
           <Communities
             title="Favorites"
             user_subreddit={this.state.user_fav}
+            fetched={this.state.finalLoad}
             selected={selected}
             setSelectedSub={setSelectedSub}
           />
@@ -291,6 +299,7 @@ class Main extends React.Component {
           <Communities
             title="Your Communities"
             user_subreddit={this.state.user_subreddit}
+            fetched={this.state.finalLoad}
             selected={selected}
             setSelectedSub={setSelectedSub}
           />

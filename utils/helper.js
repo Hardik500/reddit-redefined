@@ -28,11 +28,11 @@ const getCookie = (key) => {
   return "";
 };
 
-const setLocal = (key, value) => {
-  localStorage.setItem(key, value);
-};
+const setLocal = (key, value) => localStorage.setItem(key, value);
 
 const getLocal = (key) => localStorage.getItem(key);
+
+const removeLocal = async (key) => localStorage.removeItem(key);
 
 const htmlDecode = (input) => {
   var e = document.createElement("div");
@@ -83,6 +83,7 @@ module.exports = {
   isEmptyObject,
   nFormatter,
   reducePost,
+  removeLocal,
   sanitizeURL,
   setCookie,
   setLocal,
